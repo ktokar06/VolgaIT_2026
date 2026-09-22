@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Ads Test Suite" parallel="tests" thread-count="2">
 
-    <test name="Ads Chrome">
+<suite name="UI Test Suite" parallel="tests" thread-count="2">
+
+    <test name="Chrome">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name="org.example.tests.ads.AdsSmokeTest"/>
             <class name="org.example.tests.ads.AdsQualityTest"/>
             <class name="org.example.tests.ads.AdsRegressionTest"/>
+
+            <class name="org.example.tests.calendars.CalendarsSmokeTest"/>
+            <class name="org.example.tests.calendars.CalendarsQualityTest"/>
+            <class name="org.example.tests.calendars.CalendarsRegressionTest"/>
         </classes>
     </test>
 
-    <test name="Ads Firefox">
+    <test name="Firefox">
         <parameter name="browser" value="firefox"/>
         <classes>
             <class name="org.example.tests.ads.AdsSmokeTest"/>
             <class name="org.example.tests.ads.AdsQualityTest"/>
             <class name="org.example.tests.ads.AdsRegressionTest"/>
+
+            <class name="org.example.tests.calendars.CalendarsSmokeTest"/>
+            <class name="org.example.tests.calendars.CalendarsQualityTest"/>
+            <class name="org.example.tests.calendars.CalendarsRegressionTest"/>
         </classes>
     </test>
+
 </suite>

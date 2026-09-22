@@ -7,7 +7,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-import static org.example.config.TimeoutConfig.SHORT_TIMEOUT;
 import static org.example.config.TimeoutConfig.DEFAULT_TIMEOUT;
 
 public final class WaitUtils {
@@ -18,13 +17,6 @@ public final class WaitUtils {
         return new WebDriverWait(
                 driver,
                 Duration.ofSeconds(DEFAULT_TIMEOUT)
-        );
-    }
-
-    public static WebDriverWait getShortWait(WebDriver driver) {
-        return new WebDriverWait(
-                driver,
-                Duration.ofSeconds(SHORT_TIMEOUT)
         );
     }
 
@@ -42,5 +34,4 @@ public final class WaitUtils {
         return getWait(driver)
                 .until(ExpectedConditions.invisibilityOf(element));
     }
-
 }

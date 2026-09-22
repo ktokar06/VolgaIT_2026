@@ -14,6 +14,8 @@ import org.testng.annotations.Test;
 @Epic("Ads")
 @Feature("Smoke")
 public class AdsSmokeTest extends BaseTest {
+    private static final String EXPECTED_URL_PART = "/ads/";
+    private static final String EXPECTED_PAGE_TITLE = "Ads";
 
     @Test(description = "Страница Ads открывается")
     @Story("Открытие страницы Ads")
@@ -23,8 +25,8 @@ public class AdsSmokeTest extends BaseTest {
 
         AdsPage page = new AdsPage(driver);
 
-        Assert.assertTrue(driver.getCurrentUrl().contains("/ads/"), "URL не содержит /ads/");
-        Assert.assertEquals(page.getPageTitle(), "Ads", "Заголовок страницы не равен Ads");
+        Assert.assertTrue(driver.getCurrentUrl().contains(EXPECTED_URL_PART), "URL не содержит /ads/");
+        Assert.assertEquals(page.getPageTitle(), EXPECTED_PAGE_TITLE, "Заголовок страницы не равен Ads");
     }
 
     @Test(description = "Рекламное окно появляется автоматически")

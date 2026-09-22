@@ -40,8 +40,7 @@ public class AdsPage extends BasePage {
 
     @Step("Дождаться появления рекламного окна")
     public AdsPage waitForAdPopup() {
-        getWait(driver)
-                .until(ExpectedConditions.visibilityOf(adContainer));
+        getWait(driver).until(ExpectedConditions.visibilityOf(adContainer));
 
         return this;
     }
@@ -75,26 +74,22 @@ public class AdsPage extends BasePage {
 
     @Step("Получить заголовок страницы")
     public String getPageTitle() {
-        return waitForVisibility(driver, pageTitle)
-                .getText();
+        return waitForVisibility(driver, pageTitle).getText();
     }
 
     @Step("Получить заголовок рекламного окна")
     public String getAdPopupTitle() {
-        return waitForVisibility(driver, adTitle)
-                .getText();
+        return waitForVisibility(driver, adTitle).getText();
     }
 
     @Step("Получить текст рекламного окна")
     public String getAdPopupText() {
-        return waitForVisibility(driver, adContent)
-                .getText();
+        return waitForVisibility(driver, adContent).getText();
     }
 
     @Step("Получить aria-label кнопки закрытия")
     public String getCloseButtonAriaLabel() {
-        return waitForVisibility(driver, adCloseButton)
-                .getAttribute("aria-label");
+        return waitForVisibility(driver, adCloseButton).getAttribute("aria-label");
     }
 
     @Step("Проверить отображение рекламного окна")
