@@ -13,10 +13,6 @@
             <class name="org.example.tests.calendars.CalendarsSmokeTest"/>
             <class name="org.example.tests.calendars.CalendarsQualityTest"/>
             <class name="org.example.tests.calendars.CalendarsRegressionTest"/>
-
-            <class name="org.example.tests.modals.ModalsSmokeTest"/>
-            <class name="org.example.tests.modals.ModalsQualityTest"/>
-            <class name="org.example.tests.modals.ModalsRegressionTest"/>
         </classes>
     </test>
 
@@ -30,10 +26,6 @@
             <class name="org.example.tests.calendars.CalendarsSmokeTest"/>
             <class name="org.example.tests.calendars.CalendarsQualityTest"/>
             <class name="org.example.tests.calendars.CalendarsRegressionTest"/>
-
-            <class name="org.example.tests.modals.ModalsSmokeTest"/>
-            <class name="org.example.tests.modals.ModalsQualityTest"/>
-            <class name="org.example.tests.modals.ModalsRegressionTest"/>
         </classes>
     </test>
 

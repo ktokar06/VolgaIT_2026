@@ -1,8 +1,5 @@
 package org.example.config;
 
-/**
- * Конфигурация таймаутов для ожиданий в тестах.
- */
 public final class TimeoutConfig {
 
     private TimeoutConfig() {
