@@ -8,10 +8,22 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.Locale;
 
+/**
+ * Класс для создания экземпляров WebDriver.
+ */
 public final class WebDriverFactory {
     private WebDriverFactory() {
     }
 
+    /**
+     * Создаёт WebDriver для указанного браузера.
+     *
+     * @param browser имя браузера
+     * @param headless запуск браузера без графического интерфейса
+     * @return экземпляр WebDriver
+     * @throws IllegalArgumentException если браузер не указан
+     * @throws IllegalArgumentException если браузер не поддерживается
+     */
     public static WebDriver create(String browser, boolean headless) {
         if (browser == null || browser.isBlank()) {
             throw new IllegalArgumentException("Браузер не указан");
@@ -27,6 +39,12 @@ public final class WebDriverFactory {
         }
     }
 
+    /**
+     * Создаёт экземпляр ChromeDriver.
+     *
+     * @param headless запуск в headless-режиме
+     * @return экземпляр ChromeDriver
+     */
     private static WebDriver createChromeDriver(boolean headless) {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-blink-features=AutomationControlled");
@@ -43,6 +61,12 @@ public final class WebDriverFactory {
         return driver;
     }
 
+    /**
+     * Создаёт экземпляр FirefoxDriver.
+     *
+     * @param headless запуск в headless-режиме
+     * @return экземпляр FirefoxDriver
+     */
     private static WebDriver createFirefoxDriver(boolean headless) {
         FirefoxOptions options = new FirefoxOptions();
         if (headless) {

@@ -12,17 +12,26 @@ import org.testng.annotations.Parameters;
 
 import java.util.Locale;
 
+/**
+ * Базовый класс для UI-тестов.
+ */
 @Listeners({
         AllureTestListener.class,
         RetryTestListener.class
 })
 public abstract class BaseTest {
+
     protected WebDriver driver;
 
     public WebDriver getDriver() {
         return driver;
     }
 
+    /**
+     * Создаёт браузер перед выполнением каждого теста.
+     *
+     * @param browser название браузера
+     */
     @BeforeMethod
     @Parameters("browser")
     public void setUp(@Optional("chrome") String browser) {
@@ -36,6 +45,9 @@ public abstract class BaseTest {
         );
     }
 
+    /**
+     * Закрывает браузер после выполнения каждого теста.
+     */
     @AfterMethod
     public void tearDown() {
         if (driver != null) {
