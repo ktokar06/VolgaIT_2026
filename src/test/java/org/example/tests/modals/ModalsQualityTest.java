@@ -23,84 +23,63 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Содержимое простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalText() {
-        driver.get(ParameterProvider.get("modals.url"));
+        driver.get(ParameterProvider.getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-
         page.openSimpleModal();
 
-        Assert.assertEquals(
-                page.getSimpleModalText(),
-                EXPECTED_SIMPLE_MODAL_TEXT,
-                "Текст простого modal не совпадает"
-        );
+        Assert.assertEquals(page.getSimpleModalText(), EXPECTED_SIMPLE_MODAL_TEXT, "Текст простого modal не совпадает");
     }
 
     @Test(description = "Простой modal закрывается кнопкой")
     @Story("Закрытие простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalCloses() {
-        driver.get(ParameterProvider.get("modals.url"));
+        driver.get(ParameterProvider.getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-
         page.openSimpleModal()
                 .closeSimpleModal();
 
-        Assert.assertFalse(
-                page.isSimpleModalDisplayed(),
-                "Простой modal не закрылся"
-        );
+        Assert.assertFalse(page.isSimpleModalDisplayed(), "Простой modal не закрылся");
     }
 
     @Test(description = "Форма modal принимает имя")
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsName() {
-        driver.get(ParameterProvider.get("modals.url"));
+        driver.get(ParameterProvider.getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-
         page.openFormModal()
                 .enterName(NAME);
 
-        Assert.assertTrue(
-                page.isFormModalDisplayed(),
-                "Modal с формой закрылся после ввода имени"
-        );
+        Assert.assertEquals(page.getNameValue(), NAME, "Имя не было установлено в поле");
     }
 
     @Test(description = "Форма modal принимает email")
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsEmail() {
-        driver.get(ParameterProvider.get("modals.url"));
+        driver.get(ParameterProvider.getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-
         page.openFormModal()
                 .enterEmail(EMAIL);
 
-        Assert.assertTrue(
-                page.isFormModalDisplayed(),
-                "Modal с формой закрылся после ввода email"
-        );
+        Assert.assertEquals(page.getEmailValue(), EMAIL, "Email не был установлен в поле");
     }
 
     @Test(description = "Форма modal принимает сообщение")
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsMessage() {
-        driver.get(ParameterProvider.get("modals.url"));
+        driver.get(ParameterProvider.getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-
         page.openFormModal()
                 .enterMessage(MESSAGE);
 
-        Assert.assertTrue(
-                page.isFormModalDisplayed(),
-                "Modal с формой закрылся после ввода сообщения"
-        );
+        Assert.assertEquals(page.getMessageValue(), MESSAGE, "Сообщение не было установлено в поле");
     }
 }

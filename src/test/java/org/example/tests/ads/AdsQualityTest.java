@@ -22,7 +22,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Содержимое рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupTitle() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -34,7 +34,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Содержимое рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupText() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -46,7 +46,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Доступность рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupCloseButtonAccessible() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -58,7 +58,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Рекламное окно")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupCloseButtonDisplayed() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();

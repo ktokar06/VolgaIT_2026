@@ -1,19 +1,10 @@
 package org.example.pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import static org.example.utils.WaitUtils.getWait;
-import static org.example.utils.WaitUtils.waitForClickable;
-import static org.example.utils.WaitUtils.waitForInvisibility;
-import static org.example.utils.WaitUtils.waitForVisibility;
 
 public class AdsPage extends BasePage {
     @FindBy(id = "pum-1272")
@@ -28,10 +19,10 @@ public class AdsPage extends BasePage {
     @FindBy(css = "#popmake-1272 .pum-content")
     private WebElement adContent;
 
-    @FindBy(css = "#popmake-1272 .pum-close")
+    @FindBy(css = "#popmake-1272 .pum-close[aria-label='Close']")
     private WebElement adCloseButton;
 
-    @FindBy(css = "h1[itemprop='headline']")
+    @FindBy(xpath = "//h1[normalize-space()='Ads']")
     private WebElement pageTitle;
 
     public AdsPage(WebDriver driver) {
@@ -40,25 +31,20 @@ public class AdsPage extends BasePage {
 
     @Step("Дождаться появления рекламного окна")
     public AdsPage waitForAdPopup() {
-        getWait(driver).until(ExpectedConditions.visibilityOf(adContainer));
-
+        waitForVisibility(driver, adContainer);
         return this;
     }
 
     @Step("Закрыть рекламное окно")
     public AdsPage closeAdPopup() {
-        waitForClickable(driver, adCloseButton).click();
+        waitForClickable(this.driver, adCloseButton).click();
         waitForInvisibility(driver, adContainer);
-
         return this;
     }
 
     @Step("Нажать Escape")
     public AdsPage pressEscape() {
-        new Actions(driver)
-                .sendKeys(Keys.ESCAPE)
-                .perform();
-
+        pressEscapeKey();
         return this;
     }
 
@@ -68,7 +54,12 @@ public class AdsPage extends BasePage {
                 .moveToElement(adOverlay)
                 .click()
                 .perform();
+        return this;
+    }
 
+    @Step("Нажать на содержимое рекламного окна")
+    public AdsPage clickAdContent() {
+        waitForVisibility(driver, adContent).click();
         return this;
     }
 
@@ -94,19 +85,11 @@ public class AdsPage extends BasePage {
 
     @Step("Проверить отображение рекламного окна")
     public boolean isAdPopupDisplayed() {
-        try {
-            return adContainer.isDisplayed();
-        } catch (NoSuchElementException | StaleElementReferenceException e) {
-            return false;
-        }
+        return isDisplayedSafeElement(adContainer);
     }
 
     @Step("Проверить отображение кнопки закрытия")
     public boolean isCloseButtonDisplayed() {
-        try {
-            return adCloseButton.isDisplayed();
-        } catch (NoSuchElementException | StaleElementReferenceException e) {
-            return false;
-        }
+        return isDisplayedSafeElement(adCloseButton);
     }
 }

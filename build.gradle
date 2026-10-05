@@ -12,8 +12,8 @@ java {
     }
 }
 
-compileJava.options.encoding = "UTF-8"
-compileTestJava.options.encoding = "UTF-8"
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
@@ -38,12 +38,17 @@ test {
     systemProperty 'screenshot.events',
             System.getProperty('screenshot.events', 'failed,skipped')
 
+    systemProperty 'java.util.logging.SimpleFormatter.format',
+            '%1$tF %1$tT [%4$s] %3$s - %5$s%6$s%n'
+
     testLogging {
-        events "passed", "skipped", "failed"
+        events 'passed', 'skipped', 'failed'
         showStandardStreams = true
     }
 }
 
 allure {
-    version = '2.29.0'
+    version = '2.30.0'
+    autoconfigure = true
+    aspectjweaver = true
 }

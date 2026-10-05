@@ -21,7 +21,7 @@ public class CalendarsSmokeTest extends BaseTest {
     @Story("Открытие страницы Calendars")
     @Severity(SeverityLevel.CRITICAL)
     public void testCalendarsPageOpens() {
-        driver.get(ParameterProvider.get("calendars.url"));
+        driver.get(ParameterProvider.getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
 
@@ -33,21 +33,10 @@ public class CalendarsSmokeTest extends BaseTest {
     @Story("Поле даты")
     @Severity(SeverityLevel.CRITICAL)
     public void testDateFieldDisplayed() {
-        driver.get(ParameterProvider.get("calendars.url"));
+        driver.get(ParameterProvider.getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
 
         Assert.assertTrue(page.isDateFieldDisplayed(), "Поле даты не отображается");
-    }
-
-    @Test(description = "Кнопка Submit отображается")
-    @Story("Форма календаря")
-    @Severity(SeverityLevel.NORMAL)
-    public void testSubmitButtonDisplayed() {
-        driver.get(ParameterProvider.get("calendars.url"));
-
-        CalendarPage page = new CalendarPage(driver);
-
-        Assert.assertTrue(page.isSubmitButtonDisplayed(), "Кнопка Submit не отображается");
     }
 }

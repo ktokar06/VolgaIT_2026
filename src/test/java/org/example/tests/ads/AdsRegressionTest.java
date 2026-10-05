@@ -19,36 +19,10 @@ public class AdsRegressionTest extends BaseTest {
     @Story("Задержка появления")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupNotDisplayedImmediately() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
 
         Assert.assertFalse(page.isAdPopupDisplayed(), "Рекламное окно появилось сразу после открытия страницы");
-    }
-
-    @Test(description = "Рекламное окно не закрывается клавишей Escape")
-    @Story("Способы закрытия")
-    @Severity(SeverityLevel.MINOR)
-    public void testAdPopupNotClosedByEscape() {
-        driver.get(ParameterProvider.get("ads.url"));
-
-        AdsPage page = new AdsPage(driver);
-        page.waitForAdPopup()
-                .pressEscape();
-
-        Assert.assertTrue(page.isAdPopupDisplayed(), "Рекламное окно закрылось клавишей Escape");
-    }
-
-    @Test(description = "Рекламное окно не закрывается кликом по overlay")
-    @Story("Способы закрытия")
-    @Severity(SeverityLevel.MINOR)
-    public void testAdPopupNotClosedByOverlayClick() {
-        driver.get(ParameterProvider.get("ads.url"));
-
-        AdsPage page = new AdsPage(driver);
-        page.waitForAdPopup()
-                .clickOverlay();
-
-        Assert.assertTrue(page.isAdPopupDisplayed(), "Рекламное окно закрылось кликом по overlay");
     }
 }

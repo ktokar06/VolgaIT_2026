@@ -21,7 +21,7 @@ public class AdsSmokeTest extends BaseTest {
     @Story("Открытие страницы Ads")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdsPageOpens() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
 
@@ -33,7 +33,7 @@ public class AdsSmokeTest extends BaseTest {
     @Story("Рекламное окно")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdPopupAppearsAutomatically() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -45,7 +45,7 @@ public class AdsSmokeTest extends BaseTest {
     @Story("Закрытие рекламного окна")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdPopupCloses() {
-        driver.get(ParameterProvider.get("ads.url"));
+        driver.get(ParameterProvider.getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup()
