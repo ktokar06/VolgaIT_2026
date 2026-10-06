@@ -1,32 +1,46 @@
 package org.example.utils;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 /**
  * Провайдер параметров для чтения конфигурационных файлов.
+ *
+ * <p>Реализован как потокобезопасный Singleton с eager-инициализацией:
+ * экземпляр создаётся при загрузке класса, что исключает гонки
+ * и не требует синхронизации при чтении.</p>
  */
 public final class ParameterProvider {
     private static final String CONFIG_PATH = "config.properties";
-    private static ParameterProvider instance;
+    private static final ParameterProvider INSTANCE = new ParameterProvider();
     private final Map<String, String> parameters;
 
     /**
-     * Приватный конструктор для реализации паттерна Singleton.
-     * Загружает параметры из конфигурационного файла.
+     * Приватный конструктор. Загружает параметры из конфигурационного файла
+     * {@value #CONFIG_PATH} и сохраняет их в неизменяемую карту.
      *
-     * @throws RuntimeException если произошла ошибка при загрузке конфигурационного файла
+     * @throws RuntimeException если произошла ошибка при загрузке конфигурации
      */
     private ParameterProvider() {
-        try {
-            parameters = new HashMap<>();
+        try (InputStream inputStream =
+                     getClass().getClassLoader().getResourceAsStream(CONFIG_PATH)) {
+
+            if (inputStream == null) {
+                throw new IllegalStateException("Конфигурационный файл не найден: " + CONFIG_PATH);
+            }
+
             Properties prop = new Properties();
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_PATH);
             prop.load(inputStream);
+
+            Map<String, String> temp = new HashMap<>();
             prop.stringPropertyNames()
-                    .forEach(key -> parameters.put(key, prop.getProperty(key)));
+                    .forEach(key -> temp.put(key, prop.getProperty(key)));
+
+            this.parameters = Collections.unmodifiableMap(temp);
+
         } catch (Exception e) {
             throw new RuntimeException("Ошибка при загрузке конфигурации", e);
         }
@@ -34,15 +48,13 @@ public final class ParameterProvider {
 
     /**
      * Возвращает значение параметра по указанному ключу.
-     * При первом вызове метода инициализирует экземпляр класса и загружает параметры.
+     *
+     * <p>Метод потокобезопасен: экземпляр уже создан при загрузке класса
      *
      * @param key ключ параметра для поиска
-     * @return значение параметра или null, если параметр с указанным ключом не найден
+     * @return значение параметра или {@code null}, если параметр не найден
      */
     public static String getRequired(String key) {
-        if (instance == null) {
-            instance = new ParameterProvider();
-        }
-        return instance.parameters.get(key);
+        return INSTANCE.parameters.get(key);
     }
 }
