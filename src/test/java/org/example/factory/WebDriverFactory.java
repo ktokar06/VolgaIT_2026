@@ -8,19 +8,21 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 
-import java.time.Duration;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.time.Duration.ofSeconds;
+import static java.util.logging.Logger.getLogger;
+import static org.example.config.TimeoutConfig.PAGE_LOAD_TIMEOUT_SECONDS;
+import static org.example.config.TimeoutConfig.SCRIPT_TIMEOUT_SECONDS;
 
 /**
  * Фабрика для создания экземпляров {@link WebDriver} в зависимости
  * от указанного браузера и режима работы (обычный или headless).
  */
 public final class WebDriverFactory {
-    private static final Logger LOGGER = Logger.getLogger(WebDriverFactory.class.getName());
-    private static final Duration PAGE_LOAD_TIMEOUT = Duration.ofSeconds(60);
-    private static final Duration SCRIPT_TIMEOUT = Duration.ofSeconds(30);
+    private static final Logger LOGGER = getLogger(WebDriverFactory.class.getName());
 
     private WebDriverFactory() {
     }
@@ -55,8 +57,8 @@ public final class WebDriverFactory {
                 throw new IllegalArgumentException("Неподдерживаемый браузер: " + browser);
         }
 
-        driver.manage().timeouts().pageLoadTimeout(PAGE_LOAD_TIMEOUT);
-        driver.manage().timeouts().scriptTimeout(SCRIPT_TIMEOUT);
+        driver.manage().timeouts().pageLoadTimeout(ofSeconds(PAGE_LOAD_TIMEOUT_SECONDS));
+        driver.manage().timeouts().scriptTimeout(ofSeconds(SCRIPT_TIMEOUT_SECONDS));
 
         if (!headless) {
             driver.manage().window().maximize();

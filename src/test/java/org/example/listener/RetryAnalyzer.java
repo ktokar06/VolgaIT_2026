@@ -1,6 +1,5 @@
 package org.example.listener;
 
-import org.example.utils.TestIdentifierUtils;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
@@ -8,11 +7,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import static java.util.logging.Logger.getLogger;
+import static org.example.utils.TestIdentifierUtils.buildKey;
+import static org.example.utils.TestIdentifierUtils.buildTestCommand;
+
 /**
  * Слушатель повторных запусков тестов TestNG.
  */
 public class RetryAnalyzer implements IRetryAnalyzer {
-    private static final Logger LOGGER = Logger.getLogger(RetryAnalyzer.class.getName());
+    private static final Logger LOGGER = getLogger(RetryAnalyzer.class.getName());
     private static final int MAX_RETRIES = 2;
     private static final Map<String, Integer> retryCounts = new ConcurrentHashMap<>();
 
@@ -28,7 +31,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
      */
     @Override
     public boolean retry(ITestResult result) {
-        String key = TestIdentifierUtils.buildKey(result);
+        String key = buildKey(result);
 
         int retryCount = retryCounts.getOrDefault(key, 0);
 
@@ -36,18 +39,12 @@ public class RetryAnalyzer implements IRetryAnalyzer {
             int nextRetry = retryCount + 1;
             retryCounts.put(key, nextRetry);
 
-            LOGGER.warning(() ->
-                    "RETRY [" + nextRetry + "/" + MAX_RETRIES + "]: "
-                            + TestIdentifierUtils.buildTestCommand(result)
-            );
+            LOGGER.warning(() -> "RETRY [" + nextRetry + "/" + MAX_RETRIES + "]: " + buildTestCommand(result));
 
             return true;
         }
 
-        LOGGER.severe(() ->
-                "RETRY исчерпан [" + MAX_RETRIES + "/" + MAX_RETRIES + "]: "
-                        + TestIdentifierUtils.buildTestCommand(result)
-        );
+        LOGGER.severe(() -> "RETRY исчерпан [" + MAX_RETRIES + "/" + MAX_RETRIES + "]: " + buildTestCommand(result));
 
         return false;
     }

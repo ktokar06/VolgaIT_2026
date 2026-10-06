@@ -7,9 +7,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Modals")
 @Feature("Quality")
@@ -23,7 +24,7 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Содержимое простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalText() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openSimpleModal();
@@ -35,7 +36,7 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Закрытие простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalCloses() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openSimpleModal()
@@ -48,7 +49,7 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsName() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -61,7 +62,7 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsEmail() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -74,7 +75,7 @@ public class ModalsQualityTest extends BaseTest {
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
     public void testFormAcceptsMessage() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()

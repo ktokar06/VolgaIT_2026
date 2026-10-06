@@ -7,19 +7,19 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.AdsPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Ads")
 @Feature("Negative")
 public class AdsNegativeTest extends BaseTest {
-
     @Test(description = "Рекламное окно не закрывается клавишей Escape")
     @Story("Некорректный способ закрытия рекламного окна")
     @Severity(SeverityLevel.MINOR)
     public void testAdPopupNotClosedByEscape() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup()
@@ -32,7 +32,7 @@ public class AdsNegativeTest extends BaseTest {
     @Story("Некорректный способ закрытия рекламного окна")
     @Severity(SeverityLevel.MINOR)
     public void testAdPopupNotClosedByOverlayClick() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup()
@@ -45,7 +45,7 @@ public class AdsNegativeTest extends BaseTest {
     @Story("Некорректный способ закрытия рекламного окна")
     @Severity(SeverityLevel.MINOR)
     public void testAdPopupNotClosedByContentClick() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup()

@@ -7,9 +7,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Modals")
 @Feature("Smoke")
@@ -21,7 +22,7 @@ public class ModalsSmokeTest extends BaseTest {
     @Story("Открытие страницы Modals")
     @Severity(SeverityLevel.CRITICAL)
     public void testModalsPageOpens() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
 
@@ -33,7 +34,7 @@ public class ModalsSmokeTest extends BaseTest {
     @Story("Открытие простого modal")
     @Severity(SeverityLevel.CRITICAL)
     public void testSimpleModalOpens() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openSimpleModal();
@@ -45,7 +46,7 @@ public class ModalsSmokeTest extends BaseTest {
     @Story("Открытие modal с формой")
     @Severity(SeverityLevel.CRITICAL)
     public void testFormModalOpens() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal();

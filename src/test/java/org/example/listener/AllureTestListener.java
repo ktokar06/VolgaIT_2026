@@ -3,7 +3,6 @@ package org.example.listener;
 import io.qameta.allure.Allure;
 import org.example.tests.BaseTest;
 import org.openqa.selenium.HasCapabilities;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
@@ -16,18 +15,30 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static io.qameta.allure.Allure.parameter;
+import static java.lang.Boolean.TRUE;
+import static java.lang.System.getProperty;
+import static java.lang.System.lineSeparator;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Locale.ROOT;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.WARNING;
+import static java.util.logging.Logger.getLogger;
+import static org.openqa.selenium.OutputType.BYTES;
+import static org.openqa.selenium.logging.LogType.BROWSER;
+import static org.testng.ITestResult.SUCCESS;
+import static org.testng.ITestResult.SKIP;
+import static org.testng.ITestResult.SUCCESS_PERCENTAGE_FAILURE;
 
 /**
  * Слушатель TestNG, интегрированный с Allure.
  */
 public class AllureTestListener implements ITestListener, IInvokedMethodListener, IConfigurationListener {
-    private static final Logger LOGGER = Logger.getLogger(AllureTestListener.class.getName());
+    private static final Logger LOGGER = getLogger(AllureTestListener.class.getName());
     private static final String EVENTS_PROPERTY = "screenshot.events";
     private static final String DEFAULT_EVENTS = "failed,skipped";
     private static final String CAPTURED_ATTRIBUTE = AllureTestListener.class.getName() + ".captured";
@@ -153,11 +164,11 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
      */
     private Set<String> loadScreenshotEvents() {
         Set<String> result = new HashSet<>();
-        String raw = System.getProperty(EVENTS_PROPERTY, DEFAULT_EVENTS);
+        String raw = getProperty(EVENTS_PROPERTY, DEFAULT_EVENTS);
         String[] parts = raw.split(",");
 
         for (String part : parts) {
-            String event = part.trim().toLowerCase(Locale.ROOT);
+            String event = part.trim().toLowerCase(ROOT);
             if (!event.isEmpty()) {
                 result.add(event);
             }
@@ -175,9 +186,9 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
      */
     private String getEvent(ITestResult result) {
         return switch (result.getStatus()) {
-            case ITestResult.SUCCESS -> "success";
-            case ITestResult.SKIP -> "skipped";
-            case ITestResult.SUCCESS_PERCENTAGE_FAILURE -> "failedButWithinSuccessPercentage";
+            case SUCCESS -> "success";
+            case SKIP -> "skipped";
+            case SUCCESS_PERCENTAGE_FAILURE -> "failedButWithinSuccessPercentage";
             default -> "failed";
         };
     }
@@ -204,9 +215,9 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
             addBrowserLogs(result);
             addOsInfo();
 
-            result.setAttribute(CAPTURED_ATTRIBUTE, Boolean.TRUE);
+            result.setAttribute(CAPTURED_ATTRIBUTE, TRUE);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Ошибка при сборе информации для Allure", e);
+            LOGGER.log(WARNING, "Ошибка при сборе информации для Allure", e);
         }
     }
 
@@ -221,7 +232,7 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
      * @param event  имя события
      */
     private void addScreenshotIfConfigured(ITestResult result, String event) {
-        String normalizedEvent = event.toLowerCase(Locale.ROOT);
+        String normalizedEvent = event.toLowerCase(ROOT);
         if (!screenshotEvents.contains(normalizedEvent) && !screenshotEvents.contains("all")) {
             return;
         }
@@ -232,21 +243,16 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
         }
 
         try {
-            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(BYTES);
             if (screenshot.length == 0) {
                 return;
             }
 
-            Allure.addAttachment(
-                    "Скриншот [" + normalizedEvent + "]",
-                    "image/png",
-                    new ByteArrayInputStream(screenshot),
-                    ".png"
-            );
+            Allure.addAttachment("Скриншот [" + normalizedEvent + "]", "image/png", new ByteArrayInputStream(screenshot), ".png");
             LOGGER.fine(() -> "Скриншот добавлен: " + normalizedEvent);
 
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Не удалось сделать скриншот", e);
+            LOGGER.log(WARNING, "Не удалось сделать скриншот", e);
         }
     }
 
@@ -262,7 +268,7 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
     private void addBrowserLogs(ITestResult result) {
         WebDriver driver = getDriver(result);
         StringBuilder builder = new StringBuilder();
-        String browserName = "unknown";
+        String browserName = "неизвестно";
 
         if (driver instanceof HasCapabilities) {
             try {
@@ -272,30 +278,32 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
             }
         }
 
-        builder.append("Browser: ").append(browserName).append(System.lineSeparator());
+        builder.append("Браузер: ")
+                .append(browserName)
+                .append(lineSeparator());
 
         if (driver == null) {
-            builder.append("WebDriver is not available").append(System.lineSeparator());
-            addTextAttachment("Browser logs", builder.toString());
+            builder.append("WebDriver недоступен").append(lineSeparator());
+            addTextAttachment("Логи браузера", builder.toString());
             return;
         }
 
         try {
-            LogEntries entries = driver.manage().logs().get(LogType.BROWSER);
+            LogEntries entries = driver.manage().logs().get(BROWSER);
             for (LogEntry entry : entries) {
-                builder.append(entry).append(System.lineSeparator());
+                builder.append(entry).append(lineSeparator());
             }
             if (entries.getAll().isEmpty()) {
-                builder.append("No browser log entries").append(System.lineSeparator());
+                builder.append("Записи в логах браузера отсутствуют").append(lineSeparator());
             }
         } catch (Exception e) {
-            LOGGER.log(Level.FINE, "Browser logs недоступны", e);
-            builder.append("Browser logs are not available: ")
+            LOGGER.log(FINE, "Логи браузера недоступны", e);
+            builder.append("Логи браузера недоступны: ")
                     .append(e.getMessage())
-                    .append(System.lineSeparator());
+                    .append(lineSeparator());
         }
 
-        addTextAttachment("Browser logs", builder.toString());
+        addTextAttachment("Логи браузера", builder.toString());
     }
 
     /**
@@ -308,15 +316,15 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
     private void addOsInfo() {
 
         StringBuilder builder = new StringBuilder();
-        builder.append("os.name=").append(System.getProperty("os.name", "unknown")).append(System.lineSeparator());
-        builder.append("os.version=").append(System.getProperty("os.version", "unknown")).append(System.lineSeparator());
-        builder.append("os.arch=").append(System.getProperty("os.arch", "unknown")).append(System.lineSeparator());
-        builder.append("java.version=").append(System.getProperty("java.version", "unknown")).append(System.lineSeparator());
-        builder.append("java.vendor=").append(System.getProperty("java.vendor", "unknown")).append(System.lineSeparator());
-        builder.append("user.country=").append(System.getProperty("user.country", "unknown")).append(System.lineSeparator());
-        builder.append("user.timezone=").append(System.getProperty("user.timezone", "unknown")).append(System.lineSeparator());
+        builder.append("os.name=").append(getProperty("os.name", "unknown")).append(lineSeparator());
+        builder.append("os.version=").append(getProperty("os.version", "unknown")).append(lineSeparator());
+        builder.append("os.arch=").append(getProperty("os.arch", "unknown")).append(lineSeparator());
+        builder.append("java.version=").append(getProperty("java.version", "unknown")).append(lineSeparator());
+        builder.append("java.vendor=").append(getProperty("java.vendor", "unknown")).append(lineSeparator());
+        builder.append("user.country=").append(getProperty("user.country", "unknown")).append(lineSeparator());
+        builder.append("user.timezone=").append(getProperty("user.timezone", "unknown")).append(lineSeparator());
 
-        addTextAttachment("OS information", builder.toString());
+        addTextAttachment("OS Информация", builder.toString());
     }
 
     /**
@@ -340,13 +348,13 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
             }
         }
 
-        String osName = System.getProperty("os.name", "unknown");
-        String osVersion = System.getProperty("os.version", "unknown");
+        String osName = getProperty("os.name", "unknown");
+        String osVersion = getProperty("os.version", "unknown");
 
-        Allure.parameter("Browser", browserName);
-        Allure.parameter("Browser version", browserVersion);
-        Allure.parameter("OS", osName);
-        Allure.parameter("OS version", osVersion);
+        parameter("Browser", browserName);
+        parameter("Browser version", browserVersion);
+        parameter("OS", osName);
+        parameter("OS version", osVersion);
 
         addOsInfo();
     }
@@ -358,12 +366,7 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
      * @param text текст вложения
      */
     private void addTextAttachment(String name, String text) {
-        Allure.addAttachment(
-                name,
-                "text/plain",
-                new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)),
-                ".txt"
-        );
+        Allure.addAttachment(name, "text/plain", new ByteArrayInputStream(text.getBytes(UTF_8)), ".txt");
     }
 
     /**

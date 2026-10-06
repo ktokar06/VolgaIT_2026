@@ -9,9 +9,10 @@ import org.example.dataprovider.ModalDataProvider;
 import org.example.dataprovider.ModalType;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Modals")
 @Feature("Negative")
@@ -25,7 +26,7 @@ public class ModalsNegativeTest extends BaseTest {
     @Story("Известный баг: нет валидации name")
     @Severity(SeverityLevel.CRITICAL)
     public void testEmptyNameSubmissionIsKnownBug() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -41,7 +42,7 @@ public class ModalsNegativeTest extends BaseTest {
     @Story("Известный баг: нет валидации email")
     @Severity(SeverityLevel.CRITICAL)
     public void testInvalidEmailSubmissionIsKnownBug() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -57,7 +58,7 @@ public class ModalsNegativeTest extends BaseTest {
     @Story("Известный баг: нет валидации message")
     @Severity(SeverityLevel.CRITICAL)
     public void testEmptyMessageSubmissionIsKnownBug() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -75,10 +76,11 @@ public class ModalsNegativeTest extends BaseTest {
     @Story("Некорректный способ закрытия modal")
     @Severity(SeverityLevel.MINOR)
     public void testModalNotClosedByEscape(ModalType modalType) {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
-        page.openModal(modalType).pressEscape();
+        page.openModal(modalType)
+                .pressEscape();
 
         Assert.assertTrue(page.isModalDisplayed(modalType), "Modal закрылся клавишей Escape: " + modalType);
     }

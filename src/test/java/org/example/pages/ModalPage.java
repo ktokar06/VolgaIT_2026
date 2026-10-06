@@ -52,102 +52,102 @@ public class ModalPage extends BasePage {
 
     @Step("Получить заголовок страницы")
     public String getPageTitle() {
-        return waitForVisibility(driver, pageTitle).getText();
+        return awaitVisibility(driver, pageTitle).getText();
     }
 
     @Step("Открыть простой modal")
     public ModalPage openSimpleModal() {
-        waitForClickable(this.driver, simpleModalButton).click();
-        waitForVisibility(driver, simpleModal);
+        awaitClickable(driver, simpleModalButton).click();
+        awaitVisibility(driver, simpleModal);
         return this;
     }
 
     @Step("Открыть modal с формой")
     public ModalPage openFormModal() {
-        waitForClickable(this.driver, formModalButton).click();
-        waitForVisibility(driver, formModal);
+        awaitClickable(driver, formModalButton).click();
+        awaitVisibility(driver, formModal);
         return this;
     }
 
     @Step("Закрыть простой modal")
     public ModalPage closeSimpleModal() {
-        waitForClickable(this.driver, simpleModalCloseButton).click();
-        waitForInvisibility(driver, simpleModal);
+        awaitClickable(driver, simpleModalCloseButton).click();
+        awaitInvisibility(driver, simpleModal);
         return this;
     }
 
     @Step("Закрыть modal с формой")
     public ModalPage closeFormModal() {
-        waitForClickable(this.driver, formModalCloseButton).click();
-        waitForInvisibility(driver, formModal);
+        awaitClickable(driver, formModalCloseButton).click();
+        awaitInvisibility(driver, formModal);
         return this;
     }
 
     @Step("Получить содержимое простого modal")
     public String getSimpleModalText() {
-        return waitForVisibility(driver, simpleModalContent).getText();
+        return awaitVisibility(driver, simpleModalContent).getText();
     }
 
     @Step("Проверить отображение простого modal")
     public boolean isSimpleModalDisplayed() {
-        return isDisplayedSafeElement(simpleModal);
+        return isElementDisplayed(simpleModal);
     }
 
     @Step("Проверить отображение modal с формой")
     public boolean isFormModalDisplayed() {
-        return isDisplayedSafeElement(formModal);
+        return isElementDisplayed(formModal);
     }
 
     @Step("Ввести имя: {0}")
     public ModalPage enterName(String name) {
-        waitForVisibility(driver, nameInput).clear();
+        awaitVisibility(driver, nameInput).clear();
         nameInput.sendKeys(name);
         return this;
     }
 
     @Step("Ввести email: {0}")
     public ModalPage enterEmail(String email) {
-        waitForVisibility(driver, emailInput).clear();
+        awaitVisibility(driver, emailInput).clear();
         emailInput.sendKeys(email);
         return this;
     }
 
     @Step("Ввести сообщение: {0}")
     public ModalPage enterMessage(String message) {
-        waitForVisibility(driver, messageInput).clear();
+        awaitVisibility(driver, messageInput).clear();
         messageInput.sendKeys(message);
         return this;
     }
 
     @Step("Получить значение имени")
     public String getNameValue() {
-        return waitForVisibility(driver, nameInput).getDomProperty("value");
+        return awaitVisibility(driver, nameInput).getDomProperty("value");
     }
 
     @Step("Получить значение email")
     public String getEmailValue() {
-        return waitForVisibility(driver, emailInput).getDomProperty("value");
+        return awaitVisibility(driver, emailInput).getDomProperty("value");
     }
 
     @Step("Получить значение сообщения")
     public String getMessageValue() {
-        return waitForVisibility(driver, messageInput).getDomProperty("value");
+        return awaitVisibility(driver, messageInput).getDomProperty("value");
     }
 
     @Step("Отправить форму")
     public ModalPage submitForm() {
-        waitForClickable(this.driver, submitButton).click();
+        awaitClickable(driver, submitButton).click();
         return this;
     }
 
     @Step("Получить сообщение об успешной отправке")
     public String getSuccessMessage() {
-        return waitForVisibility(driver, successMessage).getText();
+        return awaitVisibility(driver, successMessage).getText();
     }
 
     @Step("Проверить отображение сообщения об успешной отправке")
     public boolean isSuccessMessageDisplayed() {
-        return isDisplayedSafeElement(successMessage);
+        return isElementDisplayed(successMessage);
     }
 
     @Step("Нажать Escape")

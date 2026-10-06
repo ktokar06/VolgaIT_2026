@@ -10,7 +10,6 @@ import java.util.List;
 import static org.example.utils.WaitUtils.waitForElements;
 
 public class FormFieldsPage extends BasePage {
-
     @FindBy(xpath = "//label[normalize-space()='Automation tools']/following-sibling::ul[1]/li")
     private List<WebElement> automationTools;
 

@@ -7,9 +7,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.CalendarPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Calendars")
 @Feature("Regression")
@@ -21,7 +22,7 @@ public class CalendarsRegressionTest extends BaseTest {
     @Story("Начальное состояние")
     @Severity(SeverityLevel.NORMAL)
     public void testDateFieldIsEmptyInitially() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
 
@@ -32,7 +33,7 @@ public class CalendarsRegressionTest extends BaseTest {
     @Story("Повторный ввод")
     @Severity(SeverityLevel.NORMAL)
     public void testDateCanBeReenteredAfterClearing() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(VALID_DATE)
@@ -46,7 +47,7 @@ public class CalendarsRegressionTest extends BaseTest {
     @Story("Отправка даты")
     @Severity(SeverityLevel.NORMAL)
     public void testValidDateCanBeSubmitted() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(VALID_DATE)

@@ -7,9 +7,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.AdsPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Ads")
 @Feature("Quality")
@@ -22,7 +23,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Содержимое рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupTitle() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -34,7 +35,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Содержимое рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupText() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -46,7 +47,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Доступность рекламного окна")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupCloseButtonAccessible() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();
@@ -58,7 +59,7 @@ public class AdsQualityTest extends BaseTest {
     @Story("Рекламное окно")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupCloseButtonDisplayed() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
         page.waitForAdPopup();

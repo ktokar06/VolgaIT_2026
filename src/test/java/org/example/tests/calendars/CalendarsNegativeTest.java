@@ -8,9 +8,10 @@ import io.qameta.allure.Story;
 import org.example.dataprovider.CalendarDataProvider;
 import org.example.pages.CalendarPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Calendars")
 @Feature("Negative")
@@ -23,7 +24,7 @@ public class CalendarsNegativeTest extends BaseTest {
     @Story("Известный баг: нет валидации формата даты")
     @Severity(SeverityLevel.NORMAL)
     public void testInvalidDateFormatAcceptedByField(String invalidDate) {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(invalidDate);
@@ -35,7 +36,7 @@ public class CalendarsNegativeTest extends BaseTest {
     @Story("Невалидный формат даты")
     @Severity(SeverityLevel.NORMAL)
     public void testInvalidDateDoesNotProduceSuccessMessage() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate("15-10-2026").submitDate();
@@ -47,7 +48,7 @@ public class CalendarsNegativeTest extends BaseTest {
     @Story("Известный баг: min не блокирует ввод")
     @Severity(SeverityLevel.MINOR)
     public void testOutOfRangeDateAcceptedByInputField() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(OUT_OF_RANGE_DATE);
@@ -59,7 +60,7 @@ public class CalendarsNegativeTest extends BaseTest {
     @Story("Ограничение диапазона дат")
     @Severity(SeverityLevel.NORMAL)
     public void testOutOfRangeDateBlocksSubmission() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(OUT_OF_RANGE_DATE)
@@ -72,7 +73,7 @@ public class CalendarsNegativeTest extends BaseTest {
     @Story("Пустое значение даты")
     @Severity(SeverityLevel.NORMAL)
     public void testEmptyDateCannotBeSubmitted() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.clearDate()

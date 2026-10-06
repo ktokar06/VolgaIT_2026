@@ -7,19 +7,19 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.AdsPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Ads")
 @Feature("Regression")
 public class AdsRegressionTest extends BaseTest {
-
     @Test(description = "Рекламное окно не отображается сразу после открытия")
     @Story("Задержка появления")
     @Severity(SeverityLevel.NORMAL)
     public void testAdPopupNotDisplayedImmediately() {
-        driver.get(ParameterProvider.getRequired("ads.url"));
+        driver.get(getRequired("ads.url"));
 
         AdsPage page = new AdsPage(driver);
 

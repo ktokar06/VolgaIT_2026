@@ -1,6 +1,5 @@
 package org.example.listener;
 
-import org.example.utils.TestIdentifierUtils;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.testng.ITestListener;
@@ -15,8 +14,13 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.lineSeparator;
 import static java.nio.file.Files.createDirectories;
 import static java.nio.file.Files.writeString;
+import static java.util.logging.Logger.getLogger;
+import static org.example.utils.TestIdentifierUtils.buildKey;
+import static org.example.utils.TestIdentifierUtils.buildTestCommand;
 
 /**
  * Слушатель TestNG, который собирает информацию об упавших
@@ -24,7 +28,7 @@ import static java.nio.file.Files.writeString;
  * запуска в файл {@code FailedTests.txt}.
  */
 public class FailedTestsListener implements ITestListener, ISuiteListener {
-    private static final Logger LOGGER = Logger.getLogger(FailedTestsListener.class.getName());
+    private static final Logger LOGGER = getLogger(FailedTestsListener.class.getName());
     private static final Map<String, String> failedTests = new ConcurrentHashMap<>();
 
     /**
@@ -56,7 +60,7 @@ public class FailedTestsListener implements ITestListener, ISuiteListener {
      */
     @Override
     public void onTestSuccess(ITestResult result) {
-        failedTests.remove(TestIdentifierUtils.buildKey(result));
+        failedTests.remove(buildKey(result));
     }
 
     /**
@@ -93,10 +97,7 @@ public class FailedTestsListener implements ITestListener, ISuiteListener {
      * @param result результат выполнения теста
      */
     private void addToFailedSet(ITestResult result) {
-        failedTests.put(
-                TestIdentifierUtils.buildKey(result),
-                TestIdentifierUtils.buildTestCommand(result)
-        );
+        failedTests.put(buildKey(result), buildTestCommand(result));
     }
 
     /**
@@ -108,19 +109,13 @@ public class FailedTestsListener implements ITestListener, ISuiteListener {
      * не прерывать завершение набора тестов.</p>
      */
     private static void saveFailedTests() {
-        Path output = Paths.get(
-                System.getProperty("user.dir"),
-                "src",
-                "test",
-                "resources",
-                "FailedTests.txt"
-        );
+        Path output = Paths.get(getProperty("user.dir"), "src", "test", "resources", "FailedTests.txt");
 
         try {
             createDirectories(output.getParent());
 
             TreeSet<String> commands = new TreeSet<>(failedTests.values());
-            String result = String.join(System.lineSeparator(), commands);
+            String result = String.join(lineSeparator(), commands);
 
             writeString(output, result, StandardCharsets.UTF_8);
 

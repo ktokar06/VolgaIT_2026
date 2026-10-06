@@ -8,9 +8,10 @@ import io.qameta.allure.Story;
 import org.example.dataprovider.CalendarDataProvider;
 import org.example.pages.CalendarPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Calendars")
 @Feature("Quality")
@@ -26,7 +27,7 @@ public class CalendarsQualityTest extends BaseTest {
     @Story("Ввод валидных дат")
     @Severity(SeverityLevel.NORMAL)
     public void testValidDateCanBeEntered(String date) {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(date);
@@ -38,7 +39,7 @@ public class CalendarsQualityTest extends BaseTest {
     @Story("Изменение даты")
     @Severity(SeverityLevel.NORMAL)
     public void testDateCanBeChanged() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
         page.enterDate(VALID_DATE)

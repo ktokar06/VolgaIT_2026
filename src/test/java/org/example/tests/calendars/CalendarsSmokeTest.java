@@ -7,9 +7,10 @@ import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
 import org.example.pages.CalendarPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Calendars")
 @Feature("Smoke")
@@ -21,7 +22,7 @@ public class CalendarsSmokeTest extends BaseTest {
     @Story("Открытие страницы Calendars")
     @Severity(SeverityLevel.CRITICAL)
     public void testCalendarsPageOpens() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
 
@@ -33,7 +34,7 @@ public class CalendarsSmokeTest extends BaseTest {
     @Story("Поле даты")
     @Severity(SeverityLevel.CRITICAL)
     public void testDateFieldDisplayed() {
-        driver.get(ParameterProvider.getRequired("calendars.url"));
+        driver.get(getRequired("calendars.url"));
 
         CalendarPage page = new CalendarPage(driver);
 

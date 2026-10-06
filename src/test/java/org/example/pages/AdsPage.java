@@ -31,14 +31,14 @@ public class AdsPage extends BasePage {
 
     @Step("Дождаться появления рекламного окна")
     public AdsPage waitForAdPopup() {
-        waitForVisibility(driver, adContainer);
+        awaitVisibility(driver, adContainer);
         return this;
     }
 
     @Step("Закрыть рекламное окно")
     public AdsPage closeAdPopup() {
-        waitForClickable(this.driver, adCloseButton).click();
-        waitForInvisibility(driver, adContainer);
+        awaitClickable(driver, adCloseButton).click();
+        awaitInvisibility(driver, adContainer);
         return this;
     }
 
@@ -59,37 +59,37 @@ public class AdsPage extends BasePage {
 
     @Step("Нажать на содержимое рекламного окна")
     public AdsPage clickAdContent() {
-        waitForVisibility(driver, adContent).click();
+        awaitVisibility(driver, adContent).click();
         return this;
     }
 
     @Step("Получить заголовок страницы")
     public String getPageTitle() {
-        return waitForVisibility(driver, pageTitle).getText();
+        return awaitVisibility(driver, pageTitle).getText();
     }
 
     @Step("Получить заголовок рекламного окна")
     public String getAdPopupTitle() {
-        return waitForVisibility(driver, adTitle).getText();
+        return awaitVisibility(driver, adTitle).getText();
     }
 
     @Step("Получить текст рекламного окна")
     public String getAdPopupText() {
-        return waitForVisibility(driver, adContent).getText();
+        return awaitVisibility(driver, adContent).getText();
     }
 
     @Step("Получить aria-label кнопки закрытия")
     public String getCloseButtonAriaLabel() {
-        return waitForVisibility(driver, adCloseButton).getAttribute("aria-label");
+        return awaitVisibility(driver, adCloseButton).getAttribute("aria-label");
     }
 
     @Step("Проверить отображение рекламного окна")
     public boolean isAdPopupDisplayed() {
-        return isDisplayedSafeElement(adContainer);
+        return isElementDisplayed(adContainer);
     }
 
     @Step("Проверить отображение кнопки закрытия")
     public boolean isCloseButtonDisplayed() {
-        return isDisplayedSafeElement(adCloseButton);
+        return isElementDisplayed(adCloseButton);
     }
 }

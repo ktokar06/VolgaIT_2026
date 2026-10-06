@@ -8,9 +8,10 @@ import io.qameta.allure.Story;
 import org.example.pages.FormFieldsPage;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
-import org.example.utils.ParameterProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.example.utils.ParameterProvider.getRequired;
 
 @Epic("Modals")
 @Feature("Regression")
@@ -20,7 +21,7 @@ public class ModalsRegressionTest extends BaseTest {
     private static final String EXPECTED_SUCCESS_MESSAGE = "Thank you for your response. ✨";
 
     private String getAutomationToolsMessage() {
-        driver.get(ParameterProvider.getRequired("form-fields.url"));
+        driver.get(getRequired("form-fields.url"));
 
         FormFieldsPage page = new FormFieldsPage(driver);
         return page.getAutomationToolsAsText();
@@ -31,7 +32,7 @@ public class ModalsRegressionTest extends BaseTest {
     @Severity(SeverityLevel.NORMAL)
     public void testFormSubmission() {
         String message = getAutomationToolsMessage();
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
@@ -50,7 +51,7 @@ public class ModalsRegressionTest extends BaseTest {
     @Story("Закрытие modal")
     @Severity(SeverityLevel.MINOR)
     public void testFormModalCloses() {
-        driver.get(ParameterProvider.getRequired("modals.url"));
+        driver.get(getRequired("modals.url"));
 
         ModalPage page = new ModalPage(driver);
         page.openFormModal()
