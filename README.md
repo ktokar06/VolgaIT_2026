@@ -67,7 +67,6 @@ cd VolgaIT_2026
 Для каждого теста в отчёт добавляются:
 
 * шаги Page Object, размеченные `@Step`;
-* параметры окружения: `Browser`, `Browser version`, `OS`, `OS version`;
 * вложение `Browser logs` — console logs браузера
 * вложение `OS information` — сведения об ОС и Java;
 * скриншот — при событиях, указанных в системном свойстве `screenshot.events` (по умолчанию `failed,skipped`).
