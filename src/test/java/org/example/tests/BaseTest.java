@@ -1,6 +1,7 @@
 package org.example.tests;
 
 import org.example.factory.WebDriverFactory;
+import org.example.listener.AllureEnvironmentListener;
 import org.example.listener.AllureTestListener;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
@@ -16,7 +17,8 @@ import java.util.logging.Logger;
  * Базовый класс для всех тестовых классов.
  */
 @Listeners({
-        AllureTestListener.class
+        AllureTestListener.class,
+        AllureEnvironmentListener.class,
 })
 public abstract class BaseTest {
     private static final Logger LOGGER = Logger.getLogger(BaseTest.class.getName());

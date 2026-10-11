@@ -62,6 +62,19 @@ cd VolgaIT_2026
 
 В проекте настроена генерация отчётов Allure.
 
+**Генерация отчёта:**
+```bash
+./gradlew allureReport
+```
+Эта команда собирает результаты тестов и создает статический HTML-отчет в директории `build/reports/allure-report`. Его можно открыть локально в браузере или опубликовать на CI-сервере.
+
+**Просмотр отчёта (Allure Serve):**
+```bash
+./gradlew allureServe
+```
+Эта команда генерирует отчет во временную директорию и автоматически открывает его в браузере по умолчанию. Удобно использовать при локальной разработке для быстрой проверки результатов.
+
+
 ### Что входит в отчёт
 
 Для каждого теста в отчёт добавляются:
@@ -70,6 +83,22 @@ cd VolgaIT_2026
 * вложение `Browser logs` — console logs браузера
 * вложение `OS information` — сведения об ОС и Java;
 * скриншот — при событиях, указанных в системном свойстве `screenshot.events` (по умолчанию `failed,skipped`).
+
+**Allure: Главная страница отчета:**
+
+<img width="1920" height="959" alt="image" src="https://github.com/user-attachments/assets/2af7f223-83c7-457e-a84d-c4d3ac318ea6" />
+
+**Как выглядит отчёт, если тест прошёл:**
+
+<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-36-28" src="https://github.com/user-attachments/assets/734560ec-485b-4f3c-8e9b-63df81c61cdf" />
+
+**Если тест не прошёл, отчёт будет выглядеть так:**
+
+<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-38-21" src="https://github.com/user-attachments/assets/2b17dffc-074a-421d-bc0c-1c5d828ffeb1" />
+
+**Также отображается перезапуск тестов:**
+
+<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-39-01" src="https://github.com/user-attachments/assets/49a3692c-44ba-46ed-8884-30b718bd9395" />
 
 ### Запуск тестов из IntelliJ IDEA
 
@@ -81,9 +110,13 @@ cd VolgaIT_2026
 2. Выбрать нужную конфигурацию TestNG.
 3. В поле **VM options** добавить строку:
 
-   ```text
-   -javaagent:/путь/до/aspectjweaver-1.9.22.jar
-   ```
+```text
+-javaagent:/путь/до/aspectjweaver-1.9.22.jar
+```
+
+**Пример настройки:**
+
+<img width="866" height="734" alt="Screenshot From 2026-10-08 00-42-04" src="https://github.com/user-attachments/assets/8a63a51d-8ef7-4d0e-9436-2a823347a8dc" />
 
 ## Перезапуск тестов
 
@@ -108,7 +141,9 @@ MAX_RETRIES = 2
 
 ## Файл FailedTests.txt
 
-Если тест завершился с ошибкой или был пропущен, его команда сохраняется в:
+Если тест завершился с ошибкой или был пропущен, его команда сохраняется в файл FailedTests.txt.
+
+То есть при прогоне тестов создаётся этот файл, и в него записываются данные о неуспешных тестах.
 
 ```text
 src/test/resources/FailedTests.txt
@@ -120,6 +155,8 @@ src/test/resources/FailedTests.txt
 --tests org.example.tests.modals.ModalsSmokeTest.testModalsPageOpens
 --tests org.example.tests.ads.AdsNegativeTest.testAdPopupNotClosedByEscape
 ```
+
+<img width="649" height="112" alt="Screenshot From 2026-10-08 00-48-11" src="https://github.com/user-attachments/assets/6911d497-bf78-424c-b84b-efb7ad5d0af7" />
 
 Каждый тест записывается с новой строки.
 
@@ -261,7 +298,7 @@ src
 
 Проверяет невозможность отправки формы без даты. 1 запуск.
 
-**Всего Calendars: 16 запусков** (2 + 4 + 3 + 7).
+**Всего Calendars: 16 запусков**
 
 ---
 
@@ -333,7 +370,7 @@ src
 
 Проверяет, что modal не закрывается клавишей Escape. Параметризованный тест, 2 набора данных: SIMPLE, FORM. Итого 2 запуска.
 
-**Всего Modals: 15 запусков** (3 + 5 + 2 + 5).
+**Всего Modals: 15 запусков**
 
 ---
 
@@ -404,19 +441,3 @@ I am an ad.
 Проверяет, что рекламное окно не закрывается кликом по его содержимому.
 
 **Всего Ads: 11 запусков.**
-
-## Общее количество тестов
-
-```text
-Modals    — 15
-Calendars — 16
-Ads       — 11
-----------------
-Всего     — 42 запуска
-```
-
-При запуске в двух браузерах:
-
-```text
-42 × 2 = 84 тестовых запуска
-```

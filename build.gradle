@@ -27,6 +27,10 @@ dependencies {
     testImplementation 'org.aspectj:aspectjweaver:1.9.22'
 }
 
+tasks.named('copyCategories') {
+    enabled = false
+}
+
 test {
     useTestNG {
         suites 'src/test/resources/testng.xml'
@@ -45,6 +49,24 @@ test {
         events 'passed', 'skipped', 'failed'
         showStandardStreams = true
     }
+}
+
+tasks.register('copyAllureHistory', Copy) {
+    from("build/reports/allure-report/allureReport/history") {
+        include '**/*.json'
+    }
+    into "build/allure-results/history"
+    onlyIf {
+        file("build/reports/allure-report/allureReport/history").exists()
+    }
+}
+
+tasks.named('allureServe') {
+    dependsOn 'copyAllureHistory'
+}
+
+tasks.named('allureReport') {
+    dependsOn 'copyAllureHistory'
 }
 
 allure {

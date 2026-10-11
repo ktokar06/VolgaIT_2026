@@ -8,11 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.logging.LogEntries;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
-import org.testng.IConfigurationListener;
-import org.testng.IInvokedMethod;
-import org.testng.IInvokedMethodListener;
-import org.testng.ITestListener;
-import org.testng.ITestResult;
+import org.testng.*;
 
 import java.io.ByteArrayInputStream;
 import java.util.HashSet;
@@ -37,7 +33,8 @@ import static org.testng.ITestResult.SUCCESS_PERCENTAGE_FAILURE;
 /**
  * Слушатель TestNG, интегрированный с Allure.
  */
-public class AllureTestListener implements ITestListener, IInvokedMethodListener, IConfigurationListener {
+public class AllureTestListener implements ITestListener, IInvokedMethodListener,
+        IConfigurationListener, ISuiteListener {
     private static final Logger LOGGER = getLogger(AllureTestListener.class.getName());
     private static final String EVENTS_PROPERTY = "screenshot.events";
     private static final String DEFAULT_EVENTS = "failed,skipped";
@@ -213,7 +210,6 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
 
             addScreenshotIfConfigured(result, event);
             addBrowserLogs(result);
-            addOsInfo();
 
             result.setAttribute(CAPTURED_ATTRIBUTE, TRUE);
         } catch (Exception e) {
@@ -307,30 +303,11 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
     }
 
     /**
-     * Добавляет сведения об операционной системе и Java в отчёт Allure.
-     *
-     * <p>Выполняется один раз за прогон — данные не меняются
-     * между тестами, поэтому повторное добавление создавало бы
-     * дублирующиеся вложения в Allure.</p>
-     */
-    private void addOsInfo() {
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("os.name=").append(getProperty("os.name", "unknown")).append(lineSeparator());
-        builder.append("os.version=").append(getProperty("os.version", "unknown")).append(lineSeparator());
-        builder.append("os.arch=").append(getProperty("os.arch", "unknown")).append(lineSeparator());
-        builder.append("java.version=").append(getProperty("java.version", "unknown")).append(lineSeparator());
-        builder.append("java.vendor=").append(getProperty("java.vendor", "unknown")).append(lineSeparator());
-        builder.append("user.country=").append(getProperty("user.country", "unknown")).append(lineSeparator());
-        builder.append("user.timezone=").append(getProperty("user.timezone", "unknown")).append(lineSeparator());
-
-        addTextAttachment("OS Информация", builder.toString());
-    }
-
-    /**
      * Добавляет параметры окружения (браузер, ОС) в отчёт Allure.
      *
-     * <p>Вызывается один раз на тест — в {@link #onTestStart(ITestResult)}.</p>
+     * <p>Вызывается один раз на тест — в {@link #onTestStart(ITestResult)}.
+     * Благодаря этому при параллельном запуске Chrome и Firefox
+     * каждый тест получает корректные параметры своего браузера.</p>
      *
      * @param result результат выполнения теста
      */
@@ -355,8 +332,6 @@ public class AllureTestListener implements ITestListener, IInvokedMethodListener
         parameter("Browser version", browserVersion);
         parameter("OS", osName);
         parameter("OS version", osVersion);
-
-        addOsInfo();
     }
 
     /**

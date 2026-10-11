@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Product defects",
+    "matchedStatuses": [
+      "failed"
+    ],
+    "messageRegex": ".*AssertionError.*"
+  },
+  {
+    "name": "Automation defects",
+    "matchedStatuses": [
+      "broken"
+    ],
+    "messageRegex": ".*(WebDriverException|NoSuchElementException|TimeoutException).*"
+  },
+  {
+    "name": "Skipped tests",
+    "matchedStatuses": [
+      "skipped"
+    ]
+  }
+]
