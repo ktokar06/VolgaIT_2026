@@ -194,6 +194,7 @@ src
     │   │   └── WebDriverFactory.java
     │   │
     │   ├── listener
+    │   │   ├── AllureEnvironmentListener.java
     │   │   ├── AllureTestListener.java
     │   │   ├── FailedTestsListener.java
     │   │   ├── RetryAnalyzer.java
@@ -234,8 +235,11 @@ src
     └── resources
         ├── allure.properties
         ├── config.properties
+        ├── environment.xml
+        ├── categories.json
+        ├── executor.json
         ├── testng.xml
-        └── FailedTests.txt
+        └── FailedTests.txt - Создается после прогона тестов
 ```
 
 ## Тестовые сценарии
