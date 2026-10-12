@@ -45,19 +45,32 @@ test {
     systemProperty 'java.util.logging.SimpleFormatter.format',
             '%1$tF %1$tT [%4$s] %3$s - %5$s%6$s%n'
 
+    systemProperty 'allure.results.directory',
+            layout.buildDirectory.dir('allure-results').get().asFile.absolutePath
+
     testLogging {
         events 'passed', 'skipped', 'failed'
         showStandardStreams = true
     }
 }
 
+allure {
+    version = '2.30.0'
+    autoconfigure = true
+    aspectjweaver = true
+
+    report {
+        reportDir.set(layout.buildDirectory.dir('reports/allure-report'))
+    }
+}
 tasks.register('copyAllureHistory', Copy) {
-    from("build/reports/allure-report/allureReport/history") {
+    from(layout.buildDirectory.dir('reports/allure-report/allureReport/history')) {
         include '**/*.json'
     }
-    into "build/allure-results/history"
+    into(layout.buildDirectory.dir('allure-results/history'))
     onlyIf {
-        file("build/reports/allure-report/allureReport/history").exists()
+        layout.buildDirectory.dir('reports/allure-report/allureReport/history')
+                .get().asFile.exists()
     }
 }
 
@@ -66,11 +79,5 @@ tasks.named('allureServe') {
 }
 
 tasks.named('allureReport') {
-    dependsOn 'copyAllureHistory'
-}
-
-allure {
-    version = '2.30.0'
-    autoconfigure = true
-    aspectjweaver = true
+    finalizedBy 'copyAllureHistory'
 }
