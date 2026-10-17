@@ -1,4 +1,4 @@
-package org.example.dataprovider;
+package org.example.enums;
 
 /**
  * Перечисление типов модальных окон, используемых в тестах.

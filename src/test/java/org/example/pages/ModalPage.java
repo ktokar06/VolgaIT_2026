@@ -1,7 +1,7 @@
 package org.example.pages;
 
 import io.qameta.allure.Step;
-import org.example.dataprovider.ModalType;
+import org.example.enums.ModalType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;

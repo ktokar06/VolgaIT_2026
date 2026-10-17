@@ -1,4 +1,4 @@
-package org.example.dataprovider;
+package org.example.enums;
 
 /**
  * Данные тестируемых страниц: ключ URL в конфигурации, ожидаемая часть

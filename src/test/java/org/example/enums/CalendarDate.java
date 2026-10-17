@@ -1,4 +1,4 @@
-package org.example.dataprovider;
+package org.example.enums;
 
 import org.example.utils.DataProviderUtils;
 

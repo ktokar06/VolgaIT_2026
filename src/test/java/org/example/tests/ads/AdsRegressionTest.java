@@ -5,7 +5,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
-import org.example.dataprovider.PageInfo;
+import org.example.enums.PageInfo;
 import org.example.pages.AdsPage;
 import org.example.tests.BaseTest;
 import org.testng.Assert;

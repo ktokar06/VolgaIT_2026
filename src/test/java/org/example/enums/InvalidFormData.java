@@ -1,4 +1,4 @@
-package org.example.dataprovider;
+package org.example.enums;
 
 /**
  * Наборы данных для формы с известными багами валидации.

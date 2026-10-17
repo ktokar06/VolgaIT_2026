@@ -1,4 +1,4 @@
-package org.example.dataprovider;
+package org.example.enums;
 
 /**
  * Общие тестовые данные и ожидаемые значения, переиспользуемые

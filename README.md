@@ -296,10 +296,12 @@ src
     │   │
     │   ├── dataprovider
     │   │   ├── CalendarDataProvider.java
+    │   │   └── ModalDataProvider.java
+    │   │
+    │   ├── enums
     │   │   ├── CalendarDate.java
     │   │   ├── FormField.java
     │   │   ├── InvalidFormData.java
-    │   │   ├── ModalDataProvider.java
     │   │   ├── ModalType.java
     │   │   ├── PageInfo.java
     │   │   └── TestData.java
@@ -359,7 +361,7 @@ src
 ## Тестовые данные (enum)
 
 Чтобы убрать «магические» строки из тестов, тестовые данные вынесены в
-перечисления в пакете `dataprovider`:
+перечисления в пакете `enums`:
 
 * **`PageInfo`** — ключ URL, часть адреса и заголовок для каждой тестируемой
   страницы (Calendars/Modals/Ads). Используется в smoke-тестах.
