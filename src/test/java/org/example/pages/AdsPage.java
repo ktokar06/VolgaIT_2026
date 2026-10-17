@@ -7,19 +7,19 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class AdsPage extends BasePage {
-    @FindBy(id = "pum-1272")
+    @FindBy(css = ".pum-overlay.auto_open")
     private WebElement adOverlay;
 
-    @FindBy(id = "popmake-1272")
+    @FindBy(css = ".pum-overlay.auto_open .pum-container.popmake")
     private WebElement adContainer;
 
-    @FindBy(id = "pum_popup_title_1272")
+    @FindBy(css = ".pum-overlay.auto_open .pum-title.popmake-title")
     private WebElement adTitle;
 
-    @FindBy(css = "#popmake-1272 .pum-content")
+    @FindBy(css = ".pum-overlay.auto_open .pum-content.popmake-content")
     private WebElement adContent;
 
-    @FindBy(css = "#popmake-1272 .pum-close[aria-label='Close']")
+    @FindBy(css = ".pum-overlay.auto_open .pum-close.popmake-close")
     private WebElement adCloseButton;
 
     @FindBy(xpath = "//h1[normalize-space()='Ads']")
@@ -31,14 +31,13 @@ public class AdsPage extends BasePage {
 
     @Step("Дождаться появления рекламного окна")
     public AdsPage waitForAdPopup() {
-        awaitVisibility(driver, adContainer);
+        awaitVisibility(adContainer);
         return this;
     }
 
     @Step("Закрыть рекламное окно")
     public AdsPage closeAdPopup() {
-        awaitClickable(driver, adCloseButton).click();
-        awaitInvisibility(driver, adContainer);
+        closePopup(adCloseButton, adContainer);
         return this;
     }
 
@@ -59,28 +58,28 @@ public class AdsPage extends BasePage {
 
     @Step("Нажать на содержимое рекламного окна")
     public AdsPage clickAdContent() {
-        awaitVisibility(driver, adContent).click();
+        clickElement(adContent);
         return this;
     }
 
     @Step("Получить заголовок страницы")
     public String getPageTitle() {
-        return awaitVisibility(driver, pageTitle).getText();
+        return getElementText(pageTitle);
     }
 
     @Step("Получить заголовок рекламного окна")
     public String getAdPopupTitle() {
-        return awaitVisibility(driver, adTitle).getText();
+        return getElementText(adTitle);
     }
 
     @Step("Получить текст рекламного окна")
     public String getAdPopupText() {
-        return awaitVisibility(driver, adContent).getText();
+        return getElementText(adContent);
     }
 
     @Step("Получить aria-label кнопки закрытия")
     public String getCloseButtonAriaLabel() {
-        return awaitVisibility(driver, adCloseButton).getAttribute("aria-label");
+        return awaitVisibility(adCloseButton).getDomAttribute("aria-label");
     }
 
     @Step("Проверить отображение рекламного окна")

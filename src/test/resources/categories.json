@@ -1,20 +1,28 @@
 [
   {
-    "name": "Product defects",
+    "name": "Проверки: фактический результат не совпал с ожидаемым",
     "matchedStatuses": [
       "failed"
-    ],
-    "messageRegex": ".*AssertionError.*"
+    ]
   },
   {
-    "name": "Automation defects",
+    "name": "Ожидания и локаторы",
     "matchedStatuses": [
       "broken"
     ],
-    "messageRegex": ".*(WebDriverException|NoSuchElementException|TimeoutException).*"
+    "traceRegex": "(?s).*(TimeoutException|NoSuchElementException|StaleElementReferenceException).*"
   },
   {
-    "name": "Skipped tests",
+    "name": "Браузер и WebDriver",
+    "matchedStatuses": ["broken"],
+    "traceRegex": "(?s).*(WebDriverException|SessionNotCreatedException|NoSuchSessionException|UnreachableBrowserException).*"
+  },
+  {
+    "name": "Другие ошибки выполнения",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "Пропущенные тесты",
     "matchedStatuses": [
       "skipped"
     ]

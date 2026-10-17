@@ -5,25 +5,28 @@ import org.testng.ISuiteListener;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
+import java.util.Properties;
+import java.util.Locale;
+import java.time.ZoneId;
+
+import static org.example.utils.ParameterProvider.getBoolean;
 
 import static java.util.logging.Logger.getLogger;
 
 /**
- * Слушатель TestNG, который копирует статические файлы Allure
- * ({@code executor.json}, {@code categories.json}, {@code environment.properties})
- * в директорию результатов Allure.
+ * Копирует метаданные Allure и записывает фактическое окружение запуска.
  */
 public class AllureEnvironmentListener implements ISuiteListener {
     private static final Logger LOGGER = getLogger(AllureEnvironmentListener.class.getName());
     private static final String[] FILES_TO_COPY = {
             "executor.json",
-            "categories.json",
-            "environment.properties"
+            "categories.json"
     };
     private static final String DEFAULT_RESULTS_DIR = "build/allure-results";
     private static final String ALLURE_RESULTS_DIR_PROPERTY = "allure.results.directory";
@@ -48,6 +51,39 @@ public class AllureEnvironmentListener implements ISuiteListener {
 
         for (String fileName : FILES_TO_COPY) {
             copyResource(fileName, targetDir);
+        }
+        writeEnvironment(suite, targetDir);
+    }
+
+    private void writeEnvironment(ISuite suite, Path targetDir) {
+        Properties environment = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("environment.properties")) {
+            if (input != null) {
+                environment.load(input);
+            }
+        } catch (IOException e) {
+            LOGGER.warning("Не удалось прочитать шаблон окружения: " + e.getMessage());
+        }
+        environment.setProperty("OS", System.getProperty("os.name"));
+        environment.setProperty("OS.Version", System.getProperty("os.version"));
+        environment.setProperty("OS.Arch", System.getProperty("os.arch"));
+        environment.setProperty("Java.Version", System.getProperty("java.version"));
+        environment.setProperty("Java.Vendor", System.getProperty("java.vendor"));
+        environment.setProperty("Country", Locale.getDefault().getCountry());
+        environment.setProperty("Language", Locale.getDefault().getLanguage());
+        environment.setProperty("Timezone", ZoneId.systemDefault().getId());
+        environment.setProperty("Suite", suite.getName());
+        environment.setProperty("Headless", String.valueOf(getBoolean("headless", false)));
+        environment.setProperty("Retry.Max", String.valueOf(RetryAnalyzer.maxRetries()));
+        for (String event : new String[]{"failure", "success", "skip", "retry"}) {
+            String key = "screenshot.on." + event;
+            environment.setProperty(key, String.valueOf(getBoolean(key,
+                    "failure".equals(event) || "retry".equals(event))));
+        }
+        try (OutputStream output = Files.newOutputStream(targetDir.resolve("environment.properties"))) {
+            environment.store(output, "Actual test runtime environment");
+        } catch (IOException e) {
+            LOGGER.warning("Не удалось записать окружение Allure: " + e.getMessage());
         }
     }
 

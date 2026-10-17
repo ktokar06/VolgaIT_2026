@@ -5,7 +5,6 @@
 
     <listeners>
         <listener class-name="org.example.listener.RetryAnnotationTransformer"/>
-        <listener class-name="org.example.listener.FailedTestsListener"/>
     </listeners>
 
     <test name="Chrome">

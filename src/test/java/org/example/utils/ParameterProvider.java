@@ -49,12 +49,62 @@ public final class ParameterProvider {
     /**
      * Возвращает значение параметра по указанному ключу.
      *
-     * <p>Метод потокобезопасен: экземпляр уже создан при загрузке класса
-     *
      * @param key ключ параметра для поиска
      * @return значение параметра или {@code null}, если параметр не найден
      */
     public static String getRequired(String key) {
         return INSTANCE.parameters.get(key);
+    }
+
+    /**
+     * Возвращает значение параметра с учётом переопределения через
+     * системное свойство. Приоритет: {@code -Dkey} &gt; config.properties
+     * &gt; значение по умолчанию.
+     *
+     * @param key          ключ параметра
+     * @param defaultValue значение по умолчанию
+     * @return итоговое значение параметра
+     */
+    public static String get(String key, String defaultValue) {
+        String fromSystem = System.getProperty(key);
+        if (fromSystem != null && !fromSystem.isBlank()) {
+            return fromSystem;
+        }
+
+        String fromConfig = INSTANCE.parameters.get(key);
+        if (fromConfig != null && !fromConfig.isBlank()) {
+            return fromConfig;
+        }
+
+        return defaultValue;
+    }
+
+    /**
+     * Возвращает логическое значение параметра с учётом переопределения
+     * через системное свойство.
+     *
+     * @param key          ключ параметра
+     * @param defaultValue значение по умолчанию
+     * @return {@code true}/{@code false} в зависимости от конфигурации
+     */
+    public static boolean getBoolean(String key, boolean defaultValue) {
+        return Boolean.parseBoolean(get(key, Boolean.toString(defaultValue)));
+    }
+
+    /**
+     * Возвращает целочисленное значение параметра с учётом переопределения
+     * через системное свойство. При ошибке парсинга возвращается значение
+     * по умолчанию.
+     *
+     * @param key          ключ параметра
+     * @param defaultValue значение по умолчанию
+     * @return целочисленное значение параметра
+     */
+    public static int getInt(String key, int defaultValue) {
+        try {
+            return Integer.parseInt(get(key, Integer.toString(defaultValue)).trim());
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
     }
 }

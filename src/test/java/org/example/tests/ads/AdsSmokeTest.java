@@ -5,38 +5,32 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import org.example.dataprovider.PageInfo;
 import org.example.pages.AdsPage;
 import org.example.tests.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.example.utils.ParameterProvider.getRequired;
-
 @Epic("Ads")
 @Feature("Smoke")
 public class AdsSmokeTest extends BaseTest {
-    private static final String EXPECTED_URL_PART = "/ads/";
-    private static final String EXPECTED_PAGE_TITLE = "Ads";
-
     @Test(description = "Страница Ads открывается")
     @Story("Открытие страницы Ads")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdsPageOpens() {
-        driver.get(getRequired("ads.url"));
+        AdsPage page = new AdsPage(getDriver());
+        page.open(PageInfo.ADS.urlKey());
 
-        AdsPage page = new AdsPage(driver);
-
-        Assert.assertTrue(driver.getCurrentUrl().contains(EXPECTED_URL_PART), "URL не содержит /ads/");
-        Assert.assertEquals(page.getPageTitle(), EXPECTED_PAGE_TITLE, "Заголовок страницы не равен Ads");
+        Assert.assertTrue(getDriver().getCurrentUrl().contains(PageInfo.ADS.urlPart()), "URL не содержит /ads/");
+        Assert.assertEquals(page.getPageTitle(), PageInfo.ADS.title(), "Заголовок страницы не равен Ads");
     }
 
     @Test(description = "Рекламное окно появляется автоматически")
     @Story("Рекламное окно")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdPopupAppearsAutomatically() {
-        driver.get(getRequired("ads.url"));
-
-        AdsPage page = new AdsPage(driver);
+        AdsPage page = new AdsPage(getDriver());
+        page.open(PageInfo.ADS.urlKey());
         page.waitForAdPopup();
 
         Assert.assertTrue(page.isAdPopupDisplayed(), "Рекламное окно не появилось");
@@ -46,9 +40,8 @@ public class AdsSmokeTest extends BaseTest {
     @Story("Закрытие рекламного окна")
     @Severity(SeverityLevel.CRITICAL)
     public void testAdPopupCloses() {
-        driver.get(getRequired("ads.url"));
-
-        AdsPage page = new AdsPage(driver);
+        AdsPage page = new AdsPage(getDriver());
+        page.open(PageInfo.ADS.urlKey());
         page.waitForAdPopup()
                 .closeAdPopup();
 

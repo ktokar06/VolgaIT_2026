@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '2.11.2'
+    id 'io.qameta.allure' version '4.3.0'
 }
 
 group = 'org.example'
@@ -32,21 +32,44 @@ tasks.named('copyCategories') {
 }
 
 test {
+    outputs.upToDateWhen { false }
     useTestNG {
         suites 'src/test/resources/testng.xml'
     }
 
-    systemProperty 'headless',
-            System.getProperty('headless', 'false')
-
-    systemProperty 'screenshot.events',
-            System.getProperty('screenshot.events', 'failed,skipped')
+    [
+            'browser',
+            'headless',
+            'retry.max',
+            'screenshot.on.failure',
+            'screenshot.on.success',
+            'screenshot.on.skip',
+            'screenshot.on.retry'
+    ].each { key ->
+        def value = System.getProperty(key)
+        if (value != null) {
+            systemProperty key, value
+        }
+    }
 
     systemProperty 'java.util.logging.SimpleFormatter.format',
             '%1$tF %1$tT [%4$s] %3$s - %5$s%6$s%n'
 
     systemProperty 'allure.results.directory',
             layout.buildDirectory.dir('allure-results').get().asFile.absolutePath
+
+    doFirst {
+        def resultsDir = layout.buildDirectory.dir('allure-results').get().asFile
+        def historyDir = layout.buildDirectory.dir('allure-history').get().asFile
+
+        delete resultsDir
+        copy {
+            from historyDir.exists()
+                    ? historyDir
+                    : layout.buildDirectory.dir('reports/allure-report/allureReport/history').get().asFile
+            into new File(resultsDir, 'history')
+        }
+    }
 
     testLogging {
         events 'passed', 'skipped', 'failed'
@@ -63,21 +86,16 @@ allure {
         reportDir.set(layout.buildDirectory.dir('reports/allure-report'))
     }
 }
-tasks.register('copyAllureHistory', Copy) {
-    from(layout.buildDirectory.dir('reports/allure-report/allureReport/history')) {
-        include '**/*.json'
-    }
-    into(layout.buildDirectory.dir('allure-results/history'))
-    onlyIf {
-        layout.buildDirectory.dir('reports/allure-report/allureReport/history')
-                .get().asFile.exists()
-    }
-}
-
-tasks.named('allureServe') {
-    dependsOn 'copyAllureHistory'
-}
 
 tasks.named('allureReport') {
-    finalizedBy 'copyAllureHistory'
+    doFirst {
+        delete layout.buildDirectory.dir('reports/allure-report/allureReport')
+    }
+
+    doLast {
+        project.sync {
+            from layout.buildDirectory.dir('reports/allure-report/allureReport/history')
+            into layout.buildDirectory.dir('allure-history')
+        }
+    }
 }

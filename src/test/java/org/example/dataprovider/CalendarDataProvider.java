@@ -2,8 +2,15 @@ package org.example.dataprovider;
 
 import org.testng.annotations.DataProvider;
 
+import org.example.utils.DataProviderUtils;
+
+import static org.example.utils.DataProviderUtils.toMatrix;
+
 /**
  * Провайдер данных для тестирования календаря.
+ *
+ * <p>Данные берутся из перечисления {@link CalendarDate} и фильтруются
+ * по категории {@link CalendarDate.Category} через {@link DataProviderUtils}.</p>
  */
 public final class CalendarDataProvider {
     private CalendarDataProvider() {
@@ -12,28 +19,21 @@ public final class CalendarDataProvider {
     /**
      * Предоставляет набор корректных дат для параметризации тестов.
      *
-     * @return массив корректных дат в формате {@code yyyy-MM-dd}
+     * @return массив валидных значений {@link CalendarDate}
      */
     @DataProvider(name = "validDates")
     public static Object[][] validDates() {
-        return new Object[][]{
-                {"2026-10-15"},
-                {"2026-12-15"},
-                {"2028-02-29"}
-        };
+        return toMatrix(CalendarDate.values(), CalendarDate.Category.VALID);
     }
 
     /**
-     * Предоставляет набор некорректных дат для параметризации тестов.
+     * Предоставляет набор дат с некорректным форматом/значением.
      *
-     * @return массив некорректных дат
+     * @return массив значений {@link CalendarDate} категории
+     *         {@link CalendarDate.Category#INVALID_FORMAT}
      */
     @DataProvider(name = "invalidDates")
     public static Object[][] invalidDates() {
-        return new Object[][]{
-                {"15-10-2026"},
-                {"2026-02-30"},
-                {"2026-13-10"}
-        };
+        return toMatrix(CalendarDate.values(), CalendarDate.Category.INVALID_FORMAT);
     }
 }

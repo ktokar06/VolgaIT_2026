@@ -13,34 +13,34 @@ public class ModalPage extends BasePage {
     @FindBy(id = "formModal")
     private WebElement formModalButton;
 
-    @FindBy(id = "popmake-1318")
+    @FindBy(css = ".pum-overlay[data-popmake*='simple-modal'] .pum-container.popmake")
     private WebElement simpleModal;
 
-    @FindBy(id = "popmake-674")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] .pum-container.popmake")
     private WebElement formModal;
 
-    @FindBy(css = "#popmake-1318 .pum-content")
+    @FindBy(css = ".pum-overlay[data-popmake*='simple-modal'] .pum-content.popmake-content")
     private WebElement simpleModalContent;
 
-    @FindBy(css = "#popmake-1318 .pum-close")
+    @FindBy(css = ".pum-overlay[data-popmake*='simple-modal'] .pum-close.popmake-close")
     private WebElement simpleModalCloseButton;
 
-    @FindBy(css = "#popmake-674 .pum-close")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] .pum-close.popmake-close")
     private WebElement formModalCloseButton;
 
-    @FindBy(id = "g1051-name")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] input[name$='-name']")
     private WebElement nameInput;
 
-    @FindBy(id = "g1051-email")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] input[name$='-email']")
     private WebElement emailInput;
 
-    @FindBy(id = "contact-form-comment-g1051-message")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] textarea[name$='-message']")
     private WebElement messageInput;
 
-    @FindBy(css = "#popmake-674 button.pushbutton-wide")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] button[type='submit']")
     private WebElement submitButton;
 
-    @FindBy(css = "#popmake-674 .contact-form-submission h4")
+    @FindBy(css = ".pum-overlay[data-popmake*='sandbox-form-modal'] .contact-form-submission h4")
     private WebElement successMessage;
 
     @FindBy(css = "h1")
@@ -52,40 +52,36 @@ public class ModalPage extends BasePage {
 
     @Step("Получить заголовок страницы")
     public String getPageTitle() {
-        return awaitVisibility(driver, pageTitle).getText();
+        return getElementText(pageTitle);
     }
 
     @Step("Открыть простой modal")
     public ModalPage openSimpleModal() {
-        awaitClickable(driver, simpleModalButton).click();
-        awaitVisibility(driver, simpleModal);
+        openPopup(simpleModalButton, simpleModal);
         return this;
     }
 
     @Step("Открыть modal с формой")
     public ModalPage openFormModal() {
-        awaitClickable(driver, formModalButton).click();
-        awaitVisibility(driver, formModal);
+        openPopup(formModalButton, formModal);
         return this;
     }
 
     @Step("Закрыть простой modal")
     public ModalPage closeSimpleModal() {
-        awaitClickable(driver, simpleModalCloseButton).click();
-        awaitInvisibility(driver, simpleModal);
+        closePopup(simpleModalCloseButton, simpleModal);
         return this;
     }
 
     @Step("Закрыть modal с формой")
     public ModalPage closeFormModal() {
-        awaitClickable(driver, formModalCloseButton).click();
-        awaitInvisibility(driver, formModal);
+        closePopup(formModalCloseButton, formModal);
         return this;
     }
 
     @Step("Получить содержимое простого modal")
     public String getSimpleModalText() {
-        return awaitVisibility(driver, simpleModalContent).getText();
+        return getElementText(simpleModalContent);
     }
 
     @Step("Проверить отображение простого modal")
@@ -100,49 +96,46 @@ public class ModalPage extends BasePage {
 
     @Step("Ввести имя: {0}")
     public ModalPage enterName(String name) {
-        awaitVisibility(driver, nameInput).clear();
-        nameInput.sendKeys(name);
+        fillInput(nameInput, name);
         return this;
     }
 
     @Step("Ввести email: {0}")
     public ModalPage enterEmail(String email) {
-        awaitVisibility(driver, emailInput).clear();
-        emailInput.sendKeys(email);
+        fillInput(emailInput, email);
         return this;
     }
 
     @Step("Ввести сообщение: {0}")
     public ModalPage enterMessage(String message) {
-        awaitVisibility(driver, messageInput).clear();
-        messageInput.sendKeys(message);
+        fillInput(messageInput, message);
         return this;
     }
 
     @Step("Получить значение имени")
     public String getNameValue() {
-        return awaitVisibility(driver, nameInput).getDomProperty("value");
+        return getInputValue(nameInput);
     }
 
     @Step("Получить значение email")
     public String getEmailValue() {
-        return awaitVisibility(driver, emailInput).getDomProperty("value");
+        return getInputValue(emailInput);
     }
 
     @Step("Получить значение сообщения")
     public String getMessageValue() {
-        return awaitVisibility(driver, messageInput).getDomProperty("value");
+        return getInputValue(messageInput);
     }
 
     @Step("Отправить форму")
     public ModalPage submitForm() {
-        awaitClickable(driver, submitButton).click();
+        clickElement(submitButton);
         return this;
     }
 
     @Step("Получить сообщение об успешной отправке")
     public String getSuccessMessage() {
-        return awaitVisibility(driver, successMessage).getText();
+        return getElementText(successMessage);
     }
 
     @Step("Проверить отображение сообщения об успешной отправке")

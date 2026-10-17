@@ -5,82 +5,53 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import org.example.dataprovider.FormField;
+import org.example.dataprovider.ModalDataProvider;
+import org.example.dataprovider.PageInfo;
+import org.example.dataprovider.TestData;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.example.utils.ParameterProvider.getRequired;
-
 @Epic("Modals")
 @Feature("Quality")
 public class ModalsQualityTest extends BaseTest {
-    private static final String EXPECTED_SIMPLE_MODAL_TEXT = "Hi, I’m a simple modal.";
-    private static final String NAME = "Kirill";
-    private static final String EMAIL = "kirill@example.com";
-    private static final String MESSAGE = "Automation test";
-
     @Test(description = "Простой modal содержит ожидаемый текст")
     @Story("Содержимое простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalText() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
         page.openSimpleModal();
 
-        Assert.assertEquals(page.getSimpleModalText(), EXPECTED_SIMPLE_MODAL_TEXT, "Текст простого modal не совпадает");
+        Assert.assertEquals(page.getSimpleModalText(), TestData.SIMPLE_MODAL_TEXT.value(), "Текст простого modal не совпадает");
     }
 
     @Test(description = "Простой modal закрывается кнопкой")
     @Story("Закрытие простого modal")
     @Severity(SeverityLevel.NORMAL)
     public void testSimpleModalCloses() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
         page.openSimpleModal()
                 .closeSimpleModal();
 
         Assert.assertFalse(page.isSimpleModalDisplayed(), "Простой modal не закрылся");
     }
 
-    @Test(description = "Форма modal принимает имя")
+    @Test(dataProvider = "formFields",
+            dataProviderClass = ModalDataProvider.class,
+            description = "Форма modal принимает значение поля")
     @Story("Форма modal")
     @Severity(SeverityLevel.NORMAL)
-    public void testFormAcceptsName() {
-        driver.get(getRequired("modals.url"));
+    public void testFormAcceptsFieldValue(FormField field) {
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
+        page.openFormModal();
+        field.fill(page);
 
-        ModalPage page = new ModalPage(driver);
-        page.openFormModal()
-                .enterName(NAME);
-
-        Assert.assertEquals(page.getNameValue(), NAME, "Имя не было установлено в поле");
-    }
-
-    @Test(description = "Форма modal принимает email")
-    @Story("Форма modal")
-    @Severity(SeverityLevel.NORMAL)
-    public void testFormAcceptsEmail() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
-        page.openFormModal()
-                .enterEmail(EMAIL);
-
-        Assert.assertEquals(page.getEmailValue(), EMAIL, "Email не был установлен в поле");
-    }
-
-    @Test(description = "Форма modal принимает сообщение")
-    @Story("Форма modal")
-    @Severity(SeverityLevel.NORMAL)
-    public void testFormAcceptsMessage() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
-        page.openFormModal()
-                .enterMessage(MESSAGE);
-
-        Assert.assertEquals(page.getMessageValue(), MESSAGE, "Сообщение не было установлено в поле");
+        Assert.assertEquals(field.actualValue(page), field.value(),
+                "Значение не было установлено в поле: " + field);
     }
 }

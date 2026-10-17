@@ -5,38 +5,32 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import io.qameta.allure.Story;
+import org.example.dataprovider.PageInfo;
 import org.example.pages.ModalPage;
 import org.example.tests.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import static org.example.utils.ParameterProvider.getRequired;
-
 @Epic("Modals")
 @Feature("Smoke")
 public class ModalsSmokeTest extends BaseTest {
-    private static final String EXPECTED_PAGE_TITLE = "Modals";
-    private static final String EXPECTED_URL_PART = "/modals/";
-
     @Test(description = "Страница Modals открывается")
     @Story("Открытие страницы Modals")
     @Severity(SeverityLevel.CRITICAL)
     public void testModalsPageOpens() {
-        driver.get(getRequired("modals.url"));
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
 
-        ModalPage page = new ModalPage(driver);
-
-        Assert.assertTrue(driver.getCurrentUrl().contains(EXPECTED_URL_PART), "URL не содержит /modals/");
-        Assert.assertEquals(page.getPageTitle(), EXPECTED_PAGE_TITLE, "Заголовок страницы не равен Modals");
+        Assert.assertTrue(getDriver().getCurrentUrl().contains(PageInfo.MODALS.urlPart()), "URL не содержит /modals/");
+        Assert.assertEquals(page.getPageTitle(), PageInfo.MODALS.title(), "Заголовок страницы не равен Modals");
     }
 
     @Test(description = "Простой modal открывается")
     @Story("Открытие простого modal")
     @Severity(SeverityLevel.CRITICAL)
     public void testSimpleModalOpens() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
         page.openSimpleModal();
 
         Assert.assertTrue(page.isSimpleModalDisplayed(), "Простой modal не отображается");
@@ -46,9 +40,8 @@ public class ModalsSmokeTest extends BaseTest {
     @Story("Открытие modal с формой")
     @Severity(SeverityLevel.CRITICAL)
     public void testFormModalOpens() {
-        driver.get(getRequired("modals.url"));
-
-        ModalPage page = new ModalPage(driver);
+        ModalPage page = new ModalPage(getDriver());
+        page.open(PageInfo.MODALS.urlKey());
         page.openFormModal();
 
         Assert.assertTrue(page.isFormModalDisplayed(), "Modal с формой не отображается");
