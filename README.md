@@ -285,6 +285,175 @@ Gradle `--tests` не выбирает отдельную строку DataProvi
 --tests org.example.tests.ads.AdsNegativeTest.testAdPopupNotClosedByEscape
 ```
 
+## Запуск в Jenkins
+
+### Подготовка агента и Jenkins
+
+Пример рассчитан на Linux-агент с меткой `ui-tests`. На агенте должны быть
+установлены JDK 17, Git, Google Chrome и Firefox. Пользователь агента должен
+иметь доступ к интернету для загрузки Gradle, зависимостей, драйверов через
+Selenium Manager и обращения к тестируемому сайту.
+
+В **Manage Jenkins → Plugins** установите плагины **Pipeline**,
+**Pipeline: Declarative**, **Git**, **JUnit** и **Allure Jenkins Plugin**.
+Для автоматического запуска по GitHub webhook также нужен **GitHub plugin**.
+
+В **Manage Jenkins → Tools** настройте:
+
+| Инструмент | Имя | Настройка |
+|------------|-----|-----------|
+| JDK | `jdk17` | Путь к установленному JDK 17 на агенте |
+| Allure Commandline | `allure230` | Версия 2.30.0, можно включить автоматическую установку |
+
+Gradle используется из wrapper проекта. Имена инструментов и метка агента
+в Pipeline должны совпадать с настройками вашей установки Jenkins.
+
+### Pipeline script
+
+Создайте **New Item → Pipeline**, в разделе **Pipeline** выберите
+**Definition → Pipeline script** и вставьте пример ниже. Он хранится в
+конфигурации задачи Jenkins; файл `Jenkinsfile` для этого варианта не требуется.
+
+```groovy
+pipeline {
+    agent { label 'ui-tests' }
+
+    tools { jdk 'jdk17' }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+        timeout(time: 30, unit: 'MINUTES')
+        buildDiscarder(logRotator(
+            numToKeepStr: '20',
+            artifactNumToKeepStr: '10'
+        ))
+        skipDefaultCheckout(true)
+    }
+
+    parameters {
+        choice(
+            name: 'RETRY_MAX',
+            choices: ['0', '1', '2'],
+            description: 'Количество повторов упавшего теста'
+        )
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                deleteDir()
+                git(
+                    branch: 'semi-final',
+                    url: 'https://github.com/ktokar06/VolgaIT_2026.git'
+                )
+            }
+        }
+
+        stage('Проверка окружения') {
+            steps {
+                sh '''
+                    java -version
+                    google-chrome --version
+                    firefox --version
+                    chmod +x gradlew
+                '''
+            }
+        }
+
+        stage('UI-тесты: Chrome и Firefox') {
+            steps {
+                sh '''
+                    ./gradlew clean test \
+                        --no-daemon \
+                        --console=plain \
+                        -Dheadless=true \
+                        -Dretry.max="$RETRY_MAX"
+                '''
+            }
+            post {
+                always {
+                    junit(
+                        testResults: 'build/test-results/test/TEST-*.xml',
+                        allowEmptyResults: true
+                    )
+                    archiveArtifacts(
+                        artifacts: 'build/allure-results/**,build/reports/tests/test/**',
+                        allowEmptyArchive: true
+                    )
+                    script {
+                        if (fileExists('build/allure-results')) {
+                            allure(
+                                commandline: 'allure230',
+                                includeProperties: false,
+                                jdk: 'jdk17',
+                                reportBuildPolicy: 'ALWAYS',
+                                results: [[path: 'build/allure-results']]
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Для приватного репозитория добавьте в шаг `git` параметр
+`credentialsId: 'идентификатор-учётных-данных-Jenkins'`.
+
+### Пример ручного запуска
+
+1. Отправьте нужную версию проекта в удалённую ветку `semi-final`.
+2. Сохраните Pipeline и нажмите **Build Now** для первого запуска.
+3. После регистрации параметров используйте **Build with Parameters**.
+   Например, выберите `RETRY_MAX=1` и нажмите **Build**.
+4. В **Console Output** проверьте выполнение Gradle. Оба браузера запускаются
+   в headless-режиме по `testng.xml`; параметр `-Dbrowser` для выбора одного
+   браузера в этом примере не используется.
+5. На странице сборки откройте **Test Result**, **Allure Report** или
+   **Artifacts** с исходными результатами и диагностикой.
+
+При падении тестов Gradle возвращает ненулевой код, и сборка становится
+неуспешной. Блок `post → always` этапа тестов публикует доступные результаты
+и при таком завершении. Если ошибка произошла до создания результатов
+(например, при компиляции), отчёта о выполненных тестах может не быть:
+причину смотрите в Console Output.
+
+В этом Pipeline HTML-отчёт создаёт **Allure Jenkins Plugin**. Вызывать
+`./gradlew allureReport` или `allureServe` дополнительно не нужно. Историю
+для Trend плагин переносит из предыдущих отчётов этой же задачи Jenkins;
+для её накопления сохраняйте предыдущие сборки с Allure-отчётами. Локальная
+директория `build/allure-history/` в этом варианте не используется.
+
+### Автоматический запуск
+
+Для ночного запуска добавьте в `pipeline`, рядом с `options`, блок:
+
+```groovy
+triggers {
+    cron('H 2 * * *')
+}
+```
+
+Он запускает задачу ежедневно между 02:00 и 02:59 по часовому поясу Jenkins.
+
+Для запуска после push вместо расписания можно использовать:
+
+```groovy
+triggers {
+    githubPush()
+}
+```
+
+В GitHub откройте **Settings → Webhooks → Add webhook** и укажите
+`https://адрес-jenkins/github-webhook/`, тип содержимого `application/json`
+и событие **push**. Этот адрес должен быть доступен GitHub. После изменения
+скрипта выполните ручную сборку, чтобы Jenkins зарегистрировал triggers.
+
+Пример требует настроенного Jenkins и агента; выполнение в вашей установке
+Jenkins необходимо проверить первым ручным запуском.
+
 ## Структура проекта
 
 ```text
