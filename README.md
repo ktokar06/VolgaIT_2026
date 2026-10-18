@@ -208,19 +208,19 @@ testName_attemptN_timestamp.png
 
 **Allure: Главная страница отчета:**
 
-<img width="1920" height="959" alt="image" src="https://github.com/user-attachments/assets/2af7f223-83c7-457e-a84d-c4d3ac318ea6" />
+<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/4a326640-c375-46f0-b5f4-c456c0955ca0" />
 
 **Как выглядит отчёт, если тест прошёл:**
 
-<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-36-28" src="https://github.com/user-attachments/assets/734560ec-485b-4f3c-8e9b-63df81c61cdf" />
+<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/c2029555-7a38-4f71-bd3e-72a7bcf6bb34" />
 
 **Если тест не прошёл, отчёт будет выглядеть так:**
 
-<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-38-21" src="https://github.com/user-attachments/assets/2b17dffc-074a-421d-bc0c-1c5d828ffeb1" />
+<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/55582c88-5f9c-4476-aa91-f7ad37cff475" />
 
 **Также отображается перезапуск тестов:**
 
-<img width="1920" height="958" alt="Screenshot From 2026-10-08 00-39-01" src="https://github.com/user-attachments/assets/49a3692c-44ba-46ed-8884-30b718bd9395" />
+<img width="885" height="268" alt="image" src="https://github.com/user-attachments/assets/0aab64de-d2b2-4bec-b987-3e7cecd1a315" />
 
 ### Запуск тестов из IntelliJ IDEA
 
