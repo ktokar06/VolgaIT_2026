@@ -14,7 +14,7 @@ cd VolgaIT_2026
 
 ## Используемые технологии
 
-* Java 17 (toolchain)
+* Java 17
 * Selenium WebDriver 4.27
 * TestNG 7.10
 * Gradle 9.2.1 (wrapper) — совместим с JDK 17–25
