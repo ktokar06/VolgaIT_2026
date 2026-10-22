@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Проверки: фактический результат не совпал с ожидаемым",
+    "matchedStatuses": [
+      "failed"
+    ]
+  },
+  {
+    "name": "Ожидания и локаторы",
+    "matchedStatuses": [
+      "broken"
+    ],
+    "traceRegex": "(?s).*(TimeoutException|NoSuchElementException|StaleElementReferenceException).*"
+  },
+  {
+    "name": "Браузер и WebDriver",
+    "matchedStatuses": ["broken"],
+    "traceRegex": "(?s).*(WebDriverException|SessionNotCreatedException|NoSuchSessionException|UnreachableBrowserException).*"
+  },
+  {
+    "name": "Другие ошибки выполнения",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "Пропущенные тесты",
+    "matchedStatuses": [
+      "skipped"
+    ]
+  }
+]

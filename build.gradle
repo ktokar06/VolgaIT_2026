@@ -1,20 +1,101 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '4.3.0'
 }
 
 group = 'org.example'
 version = '1.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
+
+    testImplementation 'org.testng:testng:7.10.2'
+    testImplementation 'io.qameta.allure:allure-testng:2.30.0'
+    testImplementation 'org.aspectj:aspectjweaver:1.9.22'
+}
+
+tasks.named('copyCategories') {
+    enabled = false
 }
 
 test {
-    useJUnitPlatform()
+    outputs.upToDateWhen { false }
+    useTestNG {
+        suites 'src/test/resources/testng.xml'
+    }
+
+    [
+            'browser',
+            'headless',
+            'retry.max',
+            'screenshot.on.failure',
+            'screenshot.on.success',
+            'screenshot.on.skip',
+            'screenshot.on.retry'
+    ].each { key ->
+        def value = System.getProperty(key)
+        if (value != null) {
+            systemProperty key, value
+        }
+    }
+
+    systemProperty 'java.util.logging.SimpleFormatter.format',
+            '%1$tF %1$tT [%4$s] %3$s - %5$s%6$s%n'
+
+    systemProperty 'allure.results.directory',
+            layout.buildDirectory.dir('allure-results').get().asFile.absolutePath
+
+    doFirst {
+        def resultsDir = layout.buildDirectory.dir('allure-results').get().asFile
+        def historyDir = layout.buildDirectory.dir('allure-history').get().asFile
+
+        delete resultsDir
+        copy {
+            from historyDir.exists()
+                    ? historyDir
+                    : layout.buildDirectory.dir('reports/allure-report/allureReport/history').get().asFile
+            into new File(resultsDir, 'history')
+        }
+    }
+
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showStandardStreams = true
+    }
+}
+
+allure {
+    version = '2.30.0'
+    autoconfigure = true
+    aspectjweaver = true
+
+    report {
+        reportDir.set(layout.buildDirectory.dir('reports/allure-report'))
+    }
+}
+
+tasks.named('allureReport') {
+    doFirst {
+        delete layout.buildDirectory.dir('reports/allure-report/allureReport')
+    }
+
+    doLast {
+        project.sync {
+            from layout.buildDirectory.dir('reports/allure-report/allureReport/history')
+            into layout.buildDirectory.dir('allure-history')
+        }
+    }
 }
