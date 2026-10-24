@@ -78,7 +78,7 @@ test {
 }
 
 allure {
-    version = '2.30.0'
+    version = '2.46.0'
     autoconfigure = true
     aspectjweaver = true
 
