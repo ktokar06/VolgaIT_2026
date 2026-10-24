@@ -385,7 +385,7 @@ triggers {
 
 **Allure: Главная страница отчета Jenkins**
 
-<img width="1920" height="935" alt="image" src="https://github.com/user-attachments/assets/eba19963-2c24-4a05-bcc3-52c76f14e12a" />
+<img width="1920" height="935" alt="image" src="https://github.com/user-attachments/assets/cade7723-db1a-4a0a-8e5c-41be215a5c77" />
 
 ## Структура проекта
 
