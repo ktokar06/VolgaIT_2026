@@ -149,19 +149,19 @@ testName_attemptN_timestamp.png
 
 **Allure: Главная страница отчета:**
 
-<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/4a326640-c375-46f0-b5f4-c456c0955ca0" />
+<img width="1902" height="935" alt="image" src="https://github.com/user-attachments/assets/f1851c3c-7af4-4073-a6d1-10a0876fbbbc" />
 
 **Как выглядит отчёт, если тест прошёл:**
 
-<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/c2029555-7a38-4f71-bd3e-72a7bcf6bb34" />
+<img width="1902" height="935" alt="image" src="https://github.com/user-attachments/assets/ebe6ad69-c7ad-48f8-916b-f2c6802727e6" />
 
 **Если тест не прошёл, отчёт будет выглядеть так:**
 
-<img width="1918" height="932" alt="image" src="https://github.com/user-attachments/assets/55582c88-5f9c-4476-aa91-f7ad37cff475" />
+<img width="1908" height="936" alt="image" src="https://github.com/user-attachments/assets/edd84295-e5a0-43c7-ae2b-2d786ab064d5" />
 
 **Также отображается перезапуск тестов:**
 
-<img width="885" height="268" alt="image" src="https://github.com/user-attachments/assets/0aab64de-d2b2-4bec-b987-3e7cecd1a315" />
+<img width="846" height="348" alt="image" src="https://github.com/user-attachments/assets/30aa0427-22bb-4623-8d57-890ccca7a71f" />
 
 ### Запуск тестов из IntelliJ IDEA
 
@@ -374,6 +374,18 @@ triggers {
     githubPush()
 }
 ```
+
+**Запуск тестов через Jenkins**
+
+<img width="1916" height="940" alt="image" src="https://github.com/user-attachments/assets/b0e2d370-42eb-4086-9e7a-ebc60bf38029" />
+
+**Отчет по запуску тестов Jenkins**
+
+<img width="1920" height="935" alt="image" src="https://github.com/user-attachments/assets/1e4bbeeb-8901-4de5-8cd3-8ed969a9906c" />
+
+**Allure: Главная страница отчета Jenkins**
+
+<img width="1920" height="935" alt="image" src="https://github.com/user-attachments/assets/eba19963-2c24-4a05-bcc3-52c76f14e12a" />
 
 ## Структура проекта
 
