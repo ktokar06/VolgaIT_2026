@@ -4,9 +4,6 @@ import org.example.utils.DataProviderUtils;
 
 /**
  * Тестовые даты для страницы Calendars.
- *
- * <p>Каждая константа хранит значение даты, категорию и короткое
- * описание сценария.</p>
  */
 public enum CalendarDate implements DataProviderUtils.Categorized<CalendarDate.Category> {
     TODAY_LIKE("2026-10-15", Category.VALID, "корректная дата"),

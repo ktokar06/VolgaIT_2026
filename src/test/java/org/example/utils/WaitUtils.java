@@ -14,9 +14,6 @@ import static org.example.config.TimeoutConfig.DEFAULT_TIMEOUT;
 
 /**
  * Класс для работы с ожиданиями Selenium.
- *
- * <p>Предоставляет набор статических методов для ожидания
- * видимости, кликабельности и других состояний элементов.</p>
  */
 public final class WaitUtils {
     private WaitUtils() {

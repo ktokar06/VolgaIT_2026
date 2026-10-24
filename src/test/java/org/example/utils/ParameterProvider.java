@@ -8,10 +8,6 @@ import java.util.Properties;
 
 /**
  * Провайдер параметров для чтения конфигурационных файлов.
- *
- * <p>Реализован как потокобезопасный Singleton с eager-инициализацией:
- * экземпляр создаётся при загрузке класса, что исключает гонки
- * и не требует синхронизации при чтении.</p>
  */
 public final class ParameterProvider {
     private static final String CONFIG_PATH = "config.properties";

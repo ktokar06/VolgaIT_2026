@@ -7,10 +7,6 @@ import java.util.function.Function;
 
 /**
  * Поля формы модального окна и ожидаемые значения для проверки ввода.
- *
- * <p>Каждая константа хранит значение для ввода, действие заполнения
- * ({@code setter}) и чтение фактического значения ({@code getter}),
- * что позволяет проверять все поля одним параметризованным тестом.</p>
  */
 public enum FormField {
     NAME("Kirill", ModalPage::enterName, ModalPage::getNameValue),
