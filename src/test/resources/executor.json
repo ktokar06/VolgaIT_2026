@@ -1,0 +1,6 @@
+{
+  "name": "Gradle",
+  "type": "gradle",
+  "buildName": "UI Automation Tests",
+  "reportName": "UI Automation Test Report"
+}
